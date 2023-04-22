@@ -1,6 +1,6 @@
 import FieldRender from '@/components/fieldRender';
 import prompt from '@/prompt';
-import { performQuery } from '@/services/performQuery';
+import { performQueryStream } from '@/services/performQueryStream';
 import { isFunction, useMount, useSetState, useUrlParam } from '@pigjs/utils';
 import React from 'react';
 
@@ -17,6 +17,10 @@ const Index = () => {
         loading: false
     });
     const [messageList, setMessageList] = React.useState<MessageListType[]>([]);
+    const [streamState, setStreamState] = useSetState<any>({
+        stream: false,
+        streamList: []
+    });
 
     const feature = useUrlParam('feature');
 
@@ -32,9 +36,26 @@ const Index = () => {
         try {
             // @ts-ignore
             setState({ loading: true });
-            const { response } = await performQuery({
+            const { response } = await performQueryStream({
                 userPrompt: userPromptContent,
-                systemPrompt: systemPromptContent
+                systemPrompt: systemPromptContent,
+                onProgress: (content: string) => {
+                    setStreamState((state: any) => {
+                        let text = state.streamList[0]?.response || '';
+                        text += content;
+                        return {
+                            stream: true,
+                            streamList: [
+                                {
+                                    response: text,
+                                    prompt: values.prompt
+                                }
+                            ]
+                        };
+                    });
+                    // @ts-ignore
+                    setState({ loading: false });
+                }
             });
             setState({
                 // @ts-ignore
@@ -49,7 +70,12 @@ const Index = () => {
                     response
                 }
             ]);
+            setStreamState({
+                stream: false,
+                streamList: []
+            });
         } catch (error: any) {
+            // @ts-ignore
             setState({
                 response: null,
                 error,
@@ -62,6 +88,10 @@ const Index = () => {
                     error
                 }
             ]);
+            setStreamState({
+                stream: false,
+                streamList: []
+            });
         }
     };
 
@@ -91,6 +121,8 @@ const Index = () => {
                     messageList={messageList}
                     title={promptMemo.title}
                     description={promptMemo.description}
+                    stream={streamState.stream}
+                    streamList={streamState.streamList}
                 />
             </div>
         </div>
