@@ -1,7 +1,7 @@
 import FieldRender from '@/components/fieldRender';
 import prompt from '@/prompt';
 import { performQueryStream } from '@/services/performQueryStream';
-import { isFunction, useMount, useSetState, useUrlParam } from '@pigjs/utils';
+import { isFunction, isString, useMount, useSetState, useUrlParam } from '@pigjs/utils';
 import React from 'react';
 
 import type { MessageListType } from '@/components/fieldRender';
@@ -9,13 +9,7 @@ import type { MessageListType } from '@/components/fieldRender';
 import styles from './index.less';
 
 const Index = () => {
-    const [state, setState] = useSetState({
-        // 响应信息
-        response: null,
-        // 响应错误
-        error: null,
-        loading: false
-    });
+    const [loading, setLoading] = React.useState(false);
     const [messageList, setMessageList] = React.useState<MessageListType[]>([]);
     const [streamState, setStreamState] = useSetState<any>({
         stream: false,
@@ -34,8 +28,7 @@ const Index = () => {
         const userPromptContent = isFunction(userPrompt) ? userPrompt(values) : values.prompt;
         const systemPromptContent = isFunction(systemPrompt) ? systemPrompt(values) : systemPrompt;
         try {
-            // @ts-ignore
-            setState({ loading: true });
+            setLoading(true);
             const { response } = await performQueryStream({
                 userPrompt: userPromptContent,
                 systemPrompt: systemPromptContent,
@@ -53,16 +46,10 @@ const Index = () => {
                             ]
                         };
                     });
-                    // @ts-ignore
-                    setState({ loading: false });
+                    setLoading(false);
                 }
             });
-            setState({
-                // @ts-ignore
-                response,
-                error: null,
-                loading: false
-            });
+            setLoading(false);
             setMessageList((list) => [
                 ...list,
                 {
@@ -74,17 +61,13 @@ const Index = () => {
                 stream: false,
                 streamList: []
             });
-        } catch (error: any) {
-            // @ts-ignore
-            setState({
-                response: null,
-                error,
-                loading: false
-            });
+        } catch (err: any) {
+            const error = isString(err) ? err : JSON.stringify(err);
+            setLoading(false);
             setMessageList((list) => [
                 ...list,
                 {
-                    prompt: userPrompt,
+                    prompt: values.prompt,
                     error
                 }
             ]);
@@ -116,7 +99,7 @@ const Index = () => {
                 <FieldRender
                     schema={promptMemo.schema}
                     onSend={onSend}
-                    loading={state.loading}
+                    loading={loading}
                     initialValues={promptMemo.initialValues}
                     messageList={messageList}
                     title={promptMemo.title}

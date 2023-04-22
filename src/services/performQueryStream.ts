@@ -1,6 +1,5 @@
-import { openAIModel } from '@/config';
-import { getOpenAIApiKey } from '@/utils/index';
-import { Modal } from 'antd';
+import { getOpenAIApiKey, getOpenAIModel } from '@/utils/index';
+import { message } from 'antd';
 import { ChatGPTApi } from './chatgpt-browser';
 
 import type { CreateChatCompletionResponse } from './chatgpt-browser';
@@ -19,12 +18,13 @@ type PerformQueryOptionsType = {
 export async function performQueryStream(options: PerformQueryOptionsType) {
     const { maxAttempts = 3, systemPrompt, userPrompt, onProgress } = options;
     const key = getOpenAIApiKey();
+    const model = getOpenAIModel();
     const openai = new ChatGPTApi({ apiKey: key });
 
     for (let i = 0; i < maxAttempts; i++) {
         try {
             const completion = await openai.createChatCompletion({
-                model: openAIModel,
+                model,
                 messages: [
                     {
                         role: 'system',
@@ -47,19 +47,15 @@ export async function performQueryStream(options: PerformQueryOptionsType) {
                 response: completion.data.choices[0].message?.content?.trim()
             };
         } catch (error: any) {
-            console.error('performQuery error', error);
-            const { message } = error.response.data.error;
-            if (message.includes('server error')) {
+            console.log('performQuery error', error);
+            if (error.includes('server error')) {
                 // Problem with the OpenAI API, try again
-                Modal.error({
-                    title: '温馨提示',
-                    content: message
-                });
+                message.error(error);
             } else {
                 // Another error, give up
-                throw new Error(message);
+                throw error;
             }
         }
-        throw new Error(`Failed to complete query after ${maxAttempts} attempts. Please try again later.`);
     }
+    throw `Failed to complete query after ${maxAttempts} attempts. Please try again later.`;
 }

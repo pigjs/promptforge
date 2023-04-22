@@ -7,6 +7,7 @@ export default defineConfig({
     alias: {
         '@': resolve(__dirname, './src')
     },
+    favicons: ['logo.png'],
     mfsu: false,
     hash: true,
     conventionRoutes: {

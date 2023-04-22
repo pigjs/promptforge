@@ -1,21 +1,27 @@
 import { createParser } from 'eventsource-parser';
 import { streamAsyncIterable } from './streamAsyncIterable';
 
-class ChatGPTError extends Error {
-    statusCode?: number;
-    statusText?: string;
-    isFinal?: boolean;
-    accountId?: string;
-}
-
 export type StreamType = {
     onMessage: (data: string) => void;
-    onError?: (error: any) => void;
+    onError: (error: any) => void;
 };
 
 export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1] & StreamType) {
-    const { onMessage, onError, ...fetchOptions } = options;
-    const res = await fetch(url, fetchOptions);
+    const { onMessage, onError: onErr, ...fetchOptions } = options;
+    let res: any;
+    const onError = (error: string) => {
+        if (onErr) {
+            onErr(error);
+        } else {
+            console.error(error);
+        }
+    };
+    try {
+        res = await fetch(url, fetchOptions);
+    } catch (err) {
+        onError('ChatGPT error');
+        return;
+    }
     if (!res.ok) {
         let reason: string;
         try {
@@ -23,10 +29,8 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
         } catch (err) {
             reason = res.statusText;
             const msg = `ChatGPT error ${res.status}: ${reason}`;
-            const error = new ChatGPTError(msg, { cause: res });
-            error.statusCode = res.status;
-            error.statusText = res.statusText;
-            throw error;
+            onError(msg);
+            return;
         }
     }
     const parser = createParser((event) => {
@@ -42,23 +46,23 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
             // ignore
         }
         if (response?.detail?.type === 'invalid_request_error') {
-            const msg = `ChatGPT error ${response.detail.message}: ${response.detail.code} (${response.detail.type})`;
-            const error = new ChatGPTError(msg, { cause: response });
-            error.statusCode = response.detail.code;
-            error.statusText = response.detail.message;
+            const error = `ChatGPT error ${response.detail.message}: ${response.detail.code} (${response.detail.type})`;
 
-            if (onError) {
-                onError(error);
-            } else {
-                console.error(error);
-            }
-
+            onError(error);
             // don't feed to the event parser
             return;
         }
         parser.feed(chunk);
     };
+
+    if (res.body?.locked) {
+        const error = `ChatGPT error`;
+        onError(error);
+        return;
+    }
+
     for await (const chunk of streamAsyncIterable(res.body)) {
+        // @ts-ignore
         const str = new TextDecoder().decode(chunk);
         feed(str);
     }
