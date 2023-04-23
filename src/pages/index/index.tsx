@@ -1,6 +1,6 @@
 import FeatureList from '@/components/featureList';
 import TimeIndicator from '@/components/timeIndicator';
-import { featureEnum } from '@/enums/feature';
+import { getFeatureCategory } from '@/utils/getFeature';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import { getUrlParam, useUpdate } from '@pigjs/utils';
 import { Input } from 'antd';
@@ -31,7 +31,7 @@ const Index = () => {
 
     const featureList = React.useMemo(() => {
         // @ts-ignore
-        return featureEnum[role];
+        return getFeatureCategory(role);
     }, [role]);
 
     if (!role) {
