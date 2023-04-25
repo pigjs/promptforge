@@ -4,13 +4,14 @@ import { performQueryStream } from '@/services/performQueryStream';
 import { isFunction, isString, useMount, useSetState, useUrlParam } from '@pigjs/utils';
 import React from 'react';
 
-import type { MessageListType } from '@/components/fieldRender';
+import type { ConversationType, MessageListType } from '@/components/fieldRender';
 
 import styles from './index.less';
 
 const Index = () => {
     const [loading, setLoading] = React.useState(false);
     const [messageList, setMessageList] = React.useState<MessageListType[]>([]);
+    const [conversations, setConversations] = React.useState<ConversationType[]>([]);
     const [streamState, setStreamState] = useSetState<any>({
         stream: false,
         streamList: []
@@ -32,6 +33,7 @@ const Index = () => {
             const { response } = await performQueryStream({
                 userPrompt: userPromptContent,
                 systemPrompt: systemPromptContent,
+                messages: conversations,
                 onProgress: (content: string) => {
                     setStreamState((state: any) => {
                         let text = state.streamList[0]?.response || '';
@@ -57,6 +59,15 @@ const Index = () => {
                     response
                 }
             ]);
+            if (prompt.conversation) {
+                setConversations((list) => [
+                    ...list,
+                    {
+                        role: 'user',
+                        content: values.prompt
+                    }
+                ]);
+            }
             setStreamState({
                 stream: false,
                 streamList: []

@@ -39,6 +39,11 @@ export type MessageListType = {
     error?: string;
 };
 
+export type ConversationType = {
+    role: 'user';
+    content: string;
+};
+
 export interface FieldRenderProps extends MessageListProps {
     schema: SchemaProps[];
     onSend?: (values: Record<string, any>) => void;

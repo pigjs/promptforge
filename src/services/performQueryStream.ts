@@ -11,15 +11,17 @@ type PerformQueryOptionsType = {
     systemPrompt: string;
     /** 用户 Prompt */
     userPrompt: string;
+    /** 上下文 */
+    messages?: any[];
     onProgress: (content: string) => void;
 };
 
 // @ts-ignore
 export async function performQueryStream(options: PerformQueryOptionsType) {
-    const { maxAttempts = 3, systemPrompt, userPrompt, onProgress } = options;
+    const { maxAttempts = 3, systemPrompt, userPrompt, onProgress, messages = [] } = options;
     const key = getOpenAIApiKey();
     const model = getOpenAIModel();
-    const openai = new ChatGPTApi({ apiKey: key, apiUrl: '/api/forward' });
+    const openai = new ChatGPTApi({ apiKey: key });
 
     for (let i = 0; i < maxAttempts; i++) {
         try {
@@ -30,6 +32,7 @@ export async function performQueryStream(options: PerformQueryOptionsType) {
                         role: 'system',
                         content: systemPrompt
                     },
+                    ...messages,
                     {
                         role: 'user',
                         content: userPrompt

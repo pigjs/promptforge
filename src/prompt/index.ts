@@ -1,3 +1,4 @@
+import conversation from './conversation';
 import generateDaily from './generateDaily';
 import genVarNameFromDesc from './genVarNameFromDesc';
 import gitCmt from './gitCmt';
@@ -7,5 +8,6 @@ export default {
     genVarNameFromDesc,
     questionAnswer,
     gitCmt,
+    conversation,
     generateDaily
 };

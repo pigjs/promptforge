@@ -29,6 +29,8 @@ export type PromptSchemaType = {
         /** 卡片背景颜色 */
         color?: string;
     };
+    /** 开启会话模式（上下文） */
+    conversation?: boolean;
 };
 
 export function defineConfig(options: PromptSchemaType) {
