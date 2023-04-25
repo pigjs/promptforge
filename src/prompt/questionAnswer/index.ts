@@ -4,7 +4,7 @@ import { defineConfig } from '../base';
 export default defineConfig({
     title: '问答',
     description: '问答机器人',
-    featureCategory: 'other',
+    featureCategory: 'home',
     prompt: {
         systemPrompt: '你是一个问答机器人'
     },

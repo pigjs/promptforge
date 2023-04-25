@@ -59,7 +59,7 @@ const Index = () => {
                     response
                 }
             ]);
-            if (prompt.conversation) {
+            if (promptMemo.conversation) {
                 setConversations((list) => [
                     ...list,
                     {

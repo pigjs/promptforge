@@ -4,7 +4,7 @@ import { defineConfig } from '../base';
 export default defineConfig({
     title: '会话',
     description: '可以进行会话的机器人',
-    featureCategory: 'other',
+    featureCategory: 'home',
     conversation: true,
     prompt: {
         systemPrompt: ''

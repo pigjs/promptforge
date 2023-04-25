@@ -3,7 +3,7 @@ import { defineConfig } from 'umi';
 
 export default defineConfig({
     npmClient: 'pnpm',
-    title: 'codehub',
+    title: 'Prompt-工坊',
     alias: {
         '@': resolve(__dirname, './src')
     },
@@ -40,10 +40,7 @@ export default defineConfig({
     proxy: {
         '/api': {
             target: 'http://codehub.pigjs.com/',
-            changeOrigin: true,
-            pathRewrite: {
-                '^/api': ''
-            }
+            changeOrigin: true
         }
     }
 });

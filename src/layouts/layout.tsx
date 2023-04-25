@@ -1,9 +1,6 @@
 import SettingModal from '@/components/settingModal';
-import BugOutlined from '@ant-design/icons/BugOutlined';
-import DesktopOutlined from '@ant-design/icons/DesktopOutlined';
-import FolderViewOutlined from '@ant-design/icons/FolderViewOutlined';
+import HomeOutlined from '@ant-design/icons/HomeOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
-import ToolOutlined from '@ant-design/icons/ToolOutlined';
 import { getUrlParam } from '@pigjs/utils';
 import React from 'react';
 import { history, Outlet } from 'umi';
@@ -12,29 +9,29 @@ import styles from './index.less';
 
 const navList = [
     {
-        id: 'develop',
-        title: '开发',
-        icon: <BugOutlined className={styles.nav_item_icon} />,
-        path: '/?role=develop'
-    },
-    {
-        id: 'product',
-        title: '产品',
-        icon: <DesktopOutlined className={styles.nav_item_icon} />,
-        path: '/?role=product'
-    },
-    {
-        id: 'design',
-        title: '设计',
-        icon: <ToolOutlined className={styles.nav_item_icon} />,
-        path: '/?role=design'
-    },
-    {
-        id: 'other',
-        title: '其他',
-        icon: <FolderViewOutlined className={styles.nav_item_icon} />,
-        path: '/?role=other'
+        id: 'home',
+        title: '主页',
+        icon: <HomeOutlined className={styles.nav_item_icon} />,
+        path: '/?role=home'
     }
+    // {
+    //     id: 'product',
+    //     title: '产品',
+    //     icon: <DesktopOutlined className={styles.nav_item_icon} />,
+    //     path: '/?role=product'
+    // },
+    // {
+    //     id: 'design',
+    //     title: '设计',
+    //     icon: <ToolOutlined className={styles.nav_item_icon} />,
+    //     path: '/?role=design'
+    // },
+    // {
+    //     id: 'other',
+    //     title: '其他',
+    //     icon: <FolderViewOutlined className={styles.nav_item_icon} />,
+    //     path: '/?role=other'
+    // }
 ];
 
 const Index = () => {

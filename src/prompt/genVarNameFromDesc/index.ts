@@ -7,7 +7,7 @@ import { defineConfig } from '../base';
 export default defineConfig({
     title: '命名工具',
     description: '根据输入的参数和描述信息，生成对应的方法或变量名称',
-    featureCategory: 'develop',
+    featureCategory: 'home',
     prompt,
     schema,
     initialValues,

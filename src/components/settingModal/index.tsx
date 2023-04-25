@@ -35,7 +35,9 @@ const Index = (props: SettingProps) => {
     return (
         <Modal open={open} title='设置' onOk={onOk} onCancel={closeOpen} destroyOnClose maskClosable={false}>
             <div style={{ color: '#666', marginBottom: 10 }}>
-                注意：apiKey 不填时，采用默认 apiKey，默认 apiKey 只能支持 GPT-3.5
+                注意：这里的 apiKey 是 OpenAI API密钥。 apiKey 不填时，采用默认 apiKey。默认 apiKey 只支持
+                GPT-3.5，您可以填写自己的 apiKey，这将被保存在浏览器客户端，而不是我们的服务器。一旦你有了OpenAI账户，
+                可以创建一个密钥
             </div>
             <Form form={form} initialValues={initialValues} layout='vertical'>
                 <Form.Item name='model' label='模型'>

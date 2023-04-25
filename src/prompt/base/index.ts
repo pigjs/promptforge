@@ -6,7 +6,7 @@ export type PromptType = {
 
 export type PromptSchemaType = {
     /** 功能分类 */
-    featureCategory: 'other' | 'develop' | 'product' | 'design';
+    featureCategory: 'home';
     /** 功能标题 */
     title: string;
     /** 功能描述信息 */
