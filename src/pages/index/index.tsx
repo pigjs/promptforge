@@ -23,7 +23,7 @@ const Index = () => {
     const location = useLocation();
     const update = useUpdate();
 
-    const role = getUrlParam('role') || 'develop';
+    const role = getUrlParam('role') || 'home';
 
     React.useEffect(() => {
         update();
