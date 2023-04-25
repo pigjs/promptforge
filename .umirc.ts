@@ -39,8 +39,11 @@ export default defineConfig({
     },
     proxy: {
         '/api': {
-            target: 'http://hera.test.ecaiabc.com/',
-            changeOrigin: true
+            target: 'http://codehub.pigjs.com/',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/api': ''
+            }
         }
     }
 });
