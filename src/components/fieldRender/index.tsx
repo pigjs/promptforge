@@ -53,10 +53,17 @@ const Index = (props: FieldRenderProps) => {
     const [form] = Form.useForm();
 
     const onPressEnter = async (event: any) => {
-        event.preventDefault();
-        const values = await form.validateFields();
-        onSend?.(values);
-        form.setFieldValue('prompt', '');
+        if (event.keyCode === 13 && !event.shiftKey) {
+            console.log(event, 'event');
+            event.preventDefault();
+            // 判断是否处于中文输入状态
+            if (event.target.composing) {
+                return;
+            }
+            const values = await form.validateFields();
+            onSend?.(values);
+            form.setFieldValue('prompt', '');
+        }
     };
 
     return (
@@ -92,7 +99,7 @@ const Index = (props: FieldRenderProps) => {
                 </div>
                 <Form.Item name='prompt' noStyle rules={[{ required: true, message: 'Send a message...' }]}>
                     <TextArea
-                        onPressEnter={onPressEnter}
+                        onKeyDown={onPressEnter}
                         autoSize={{ minRows: 1, maxRows: 6 }}
                         disabled={loading}
                         placeholder='Send a message...'
