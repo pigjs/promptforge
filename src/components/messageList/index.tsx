@@ -3,6 +3,8 @@ import { isEmptyArray } from '@pigjs/utils';
 import { Avatar, List } from 'antd';
 import React, { Fragment } from 'react';
 
+import styles from './index.less';
+
 export type MessageListType = {
     response?: string;
     prompt: string;
@@ -16,43 +18,51 @@ export interface MessageListProps {
     streamList: MessageListType[];
 }
 
+const RenderItem = (props) => {
+    const { item, index } = props;
+    console.log(item, 'item');
+    return (
+        <Fragment key={index}>
+            <List.Item>
+                <List.Item.Meta
+                    avatar={<Avatar style={{ backgroundColor: '#19c37d' }}>BA</Avatar>}
+                    title={<span style={{ color: '#fff' }}>{item.prompt}</span>}
+                    className={styles.messageList_userItem}
+                />
+            </List.Item>
+            <List.Item>
+                <List.Item.Meta
+                    avatar={<Avatar style={{ backgroundColor: 'rgb(16, 163, 127)' }}>CH</Avatar>}
+                    title={
+                        item.error ? (
+                            <span style={{ color: '#ef4146' }}>{item.error}</span>
+                        ) : (
+                            <span style={{ color: '#fff', display: 'inline-block' }}>
+                                <MarkdownView source={item.response} />
+                            </span>
+                            // @ts-ignore
+                        )
+                    }
+                    className={styles.messageList_systemItem}
+                />
+            </List.Item>
+        </Fragment>
+    );
+};
+
 const Index = (props: MessageListProps) => {
     const { messageList = [], loading, stream, streamList = [] } = props;
 
     return (
-        <div style={{ width: '100%' }}>
+        <div className={styles.messageList}>
             {stream && isEmptyArray(messageList) ? null : (
                 <List
                     style={{ width: '100%' }}
                     dataSource={messageList}
                     itemLayout='horizontal'
-                    locale={{ emptyText: '暂无消息' }}
+                    locale={{ emptyText: <span style={{ color: '#fff' }}>暂无消息</span> }}
                     loading={loading}
-                    renderItem={(item, index) => {
-                        return (
-                            <Fragment key={index}>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={<Avatar style={{ backgroundColor: '#87d068' }}>BA</Avatar>}
-                                        title={item.prompt}
-                                    />
-                                </List.Item>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={<Avatar style={{ backgroundColor: 'rgb(22, 129, 255)' }}>CH</Avatar>}
-                                        title={
-                                            item.error ? (
-                                                <span style={{ color: '#ef4146' }}>{item.error}</span>
-                                            ) : (
-                                                // @ts-ignore
-                                                <MarkdownView source={item.response} />
-                                            )
-                                        }
-                                    />
-                                </List.Item>
-                            </Fragment>
-                        );
-                    }}
+                    renderItem={(item, index) => <RenderItem item={item} index={index} />}
                 />
             )}
             {stream && (
@@ -60,32 +70,8 @@ const Index = (props: MessageListProps) => {
                     style={{ width: '100%' }}
                     dataSource={streamList}
                     itemLayout='horizontal'
-                    locale={{ emptyText: '暂无消息' }}
-                    renderItem={(item, index) => {
-                        return (
-                            <Fragment key={index}>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={<Avatar style={{ backgroundColor: '#87d068' }}>BA</Avatar>}
-                                        title={item.prompt}
-                                    />
-                                </List.Item>
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={<Avatar style={{ backgroundColor: 'rgb(22, 129, 255)' }}>CH</Avatar>}
-                                        title={
-                                            item.error ? (
-                                                <span style={{ color: '#ef4146' }}>{item.error}</span>
-                                            ) : (
-                                                // @ts-ignore
-                                                <MarkdownView source={item.response} />
-                                            )
-                                        }
-                                    />
-                                </List.Item>
-                            </Fragment>
-                        );
-                    }}
+                    locale={{ emptyText: <span style={{ color: '#fff' }}>暂无消息</span> }}
+                    renderItem={(item, index) => <RenderItem item={item} index={index} />}
                 />
             )}
         </div>

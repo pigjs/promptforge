@@ -1,5 +1,6 @@
 import { resolve } from 'path';
 import { defineConfig } from 'umi';
+import config from './configs/index';
 
 export default defineConfig({
     npmClient: 'pnpm',
@@ -37,10 +38,5 @@ export default defineConfig({
                 return [/moment[/\\]locale$/, /zh-cn/];
             });
     },
-    proxy: {
-        '/api': {
-            target: 'http://codehub.pigjs.com/',
-            changeOrigin: true
-        }
-    }
+    ...config
 });

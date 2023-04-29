@@ -1,17 +1,29 @@
 import FeatureList from '@/components/featureList';
 import TimeIndicator from '@/components/timeIndicator';
-import { getFeatureCategory } from '@/utils/getFeature';
+import { getForgeList } from '@/services/forge';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
-import { getUrlParam, useUpdate } from '@pigjs/utils';
+import { useMount } from '@pigjs/utils';
 import { Input } from 'antd';
 import React from 'react';
-import { history, useLocation } from 'umi';
+import { history } from 'umi';
 
 import styles from './index.less';
 
 const { Search } = Input;
 
 const Index = () => {
+    const [dataSource, setDataSource] = React.useState();
+
+    const getData = async () => {
+        const res = await getForgeList();
+        const data = res.data || [];
+        setDataSource(data);
+    };
+
+    useMount(() => {
+        getData();
+    });
+
     const onSearch = (value: string) => {
         if (value?.trim()) {
             // @ts-ignore
@@ -19,24 +31,6 @@ const Index = () => {
             history.push('/feature?feature=questionAnswer');
         }
     };
-
-    const location = useLocation();
-    const update = useUpdate();
-
-    const role = getUrlParam('role') || 'home';
-
-    React.useEffect(() => {
-        update();
-    }, [location.search]);
-
-    const featureList = React.useMemo(() => {
-        // @ts-ignore
-        return getFeatureCategory(role);
-    }, [role]);
-
-    if (!role) {
-        return null;
-    }
 
     return (
         <div className={styles.page}>
@@ -55,7 +49,7 @@ const Index = () => {
                 />
             </div>
             <div className={styles.featureList}>
-                <FeatureList key={role} dataSource={featureList} />
+                <FeatureList dataSource={dataSource} />
             </div>
         </div>
     );

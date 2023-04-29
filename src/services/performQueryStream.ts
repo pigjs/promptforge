@@ -21,7 +21,7 @@ export async function performQueryStream(options: PerformQueryOptionsType) {
     const { maxAttempts = 3, systemPrompt, userPrompt, onProgress, messages = [] } = options;
     const key = getOpenAIApiKey();
     const model = getOpenAIModel();
-    const openai = new ChatGPTApi({ apiKey: key, apiUrl: '/api/forward' });
+    const openai = new ChatGPTApi({ apiKey: key, apiUrl: '/openai/api/forward' });
 
     for (let i = 0; i < maxAttempts; i++) {
         try {
