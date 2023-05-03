@@ -1,6 +1,6 @@
 import request from '@pigjs/request';
 
-/** 获取工具列表 */
+/** 获取应用列表 */
 export function getForgeList(data = {}) {
     return request({
         url: '/api/forge/list',
@@ -8,7 +8,15 @@ export function getForgeList(data = {}) {
     });
 }
 
-/** 创建工具 */
+/** 获取用户应用列表 */
+export function getUserForgeList(data = {}) {
+    return request({
+        url: '/api/forge/user/list',
+        params: data
+    });
+}
+
+/** 创建应用 */
 export function createForge(data = {}) {
     return request({
         url: '/api/forge/create',
@@ -26,10 +34,17 @@ export function saveDraft(data = {}) {
     });
 }
 
-/** 获取工具详情 */
+/** 获取应用详情 */
 export function getDetail(id: string) {
     return request({
         url: '/api/forge/detail',
         params: { id }
+    });
+}
+
+/** 获取分类 */
+export function getCategory() {
+    return request({
+        url: '/api/forge/category'
     });
 }

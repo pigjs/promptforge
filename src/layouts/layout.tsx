@@ -3,8 +3,6 @@ import { ProLayout, SettingDrawer } from '@ant-design/pro-components';
 import React, { useState } from 'react';
 import { history, Link, Outlet, useLocation } from 'umi';
 
-// import styles from './index.less';
-
 export default () => {
     const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
         fixSiderbar: true,
@@ -26,8 +24,6 @@ export default () => {
         fixedHeader: true,
         menuRender: () => false
     };
-    console.log(location, 'location');
-    console.log(settings, 'settings');
 
     return (
         <div id='test-pro-layout'>
@@ -78,8 +74,15 @@ export default () => {
                         </div>
                     )
                 }}
-                actionsRender={() => [<Link to='/forge'>工坊</Link>]}
-                onMenuHeaderClick={(e) => console.log(e)}
+                actionsRender={() => [
+                    <Link to='/forge' key='forge'>
+                        应用工坊
+                    </Link>,
+                    <Link to='/forge/myWorkshop' key='myWorkshop'>
+                        我的工坊
+                    </Link>
+                ]}
+                onMenuHeaderClick={() => history.push('/')}
                 menuItemRender={(item, dom) => (
                     <a
                         onClick={() => {

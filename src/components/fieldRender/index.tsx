@@ -1,57 +1,38 @@
-import { Form, Input, InputNumber, Select } from 'antd';
+import { Form } from 'antd';
 import React from 'react';
+import Field from '../field';
 
-import type { FormInstance, FormItemProps, FormProps, InputNumberProps, InputProps, SelectProps } from 'antd';
-import type { TextAreaProps } from 'antd/es/input/TextArea';
-
-const { TextArea } = Input;
-
-const fieldMap = {
-    Input,
-    TextArea,
-    InputNumber,
-    Select
-};
-
-export type FieldMapProps = {
-    Input: InputProps;
-    InputNumber: InputNumberProps;
-    Select: SelectProps;
-    TextArea: TextAreaProps;
-};
-
-export interface SchemaProps<Value extends keyof typeof fieldMap = keyof typeof fieldMap>
-    extends Omit<FormItemProps, 'name' | 'valueType'> {
-    valueType: Value;
-    fieldProps: FieldMapProps[Value];
-    name: string;
-}
+import type { FieldProps } from '@/components/field';
+import type { FormInstance, FormProps } from 'antd';
 
 export interface FieldRenderProps extends FormProps {
-    schema: SchemaProps[];
+    schema: FieldProps[];
+    noForm?: boolean;
+    defaultWidth?: number;
 }
 
 const Index: React.ForwardRefRenderFunction<FormInstance, FieldRenderProps> = (props, ref) => {
-    const { schema = [], initialValues, ...resetProps } = props;
+    const { schema = [], initialValues, noForm, defaultWidth = 160, ...resetProps } = props;
 
     const [form] = Form.useForm();
 
     React.useImperativeHandle(ref, () => form);
 
+    if (noForm) {
+        return (
+            <>
+                {schema.map((item) => (
+                    <Field key={item.name} width={defaultWidth} {...item} />
+                ))}
+            </>
+        );
+    }
+
     return (
         <Form form={form} initialValues={initialValues} {...resetProps}>
-            {schema.map((item) => {
-                const { valueType, fieldProps = {}, ...resetProps } = item;
-                const FC = fieldMap[valueType];
-                const { style = {} } = fieldProps;
-                const { width = 160 } = style;
-                return (
-                    <Form.Item key={item.name} {...resetProps}>
-                        {/* @ts-ignore */}
-                        <FC {...fieldProps} style={{ ...style, width }} />
-                    </Form.Item>
-                );
-            })}
+            {schema.map((item) => (
+                <Field key={item.name} {...item} />
+            ))}
         </Form>
     );
 };

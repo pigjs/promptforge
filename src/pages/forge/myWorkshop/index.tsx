@@ -1,6 +1,6 @@
-import { getForgeList } from '@/services/forge';
+import { getUserForgeList } from '@/services/forge';
 import { ProList } from '@ant-design/pro-components';
-import { Button, Tag } from 'antd';
+import { Button, Space, Tag } from 'antd';
 import React from 'react';
 import { history, useModel } from 'umi';
 
@@ -16,7 +16,7 @@ const Index = () => {
             pageNo,
             ...resetParams
         };
-        const res = await getForgeList(data);
+        const res = await getUserForgeList(data);
         console.log(res, 'res');
         return {
             data: res.data || [],
@@ -50,11 +50,15 @@ const Index = () => {
                     },
                     subTitle: {
                         dataIndex: 'category',
-                        title: '分类',
-                        valueEnum: categoryEnum,
                         render: (data) => {
-                            return <Tag color='#5BD8A6'>{data}</Tag>;
-                        }
+                            return (
+                                <Space>
+                                    <Tag color='#5BD8A6'>{categoryEnum[data]}</Tag>
+                                    <Tag color='#5BD8A6'>已上线</Tag>
+                                </Space>
+                            );
+                        },
+                        search: false
                     },
                     content: {
                         dataIndex: 'description',
@@ -65,20 +69,8 @@ const Index = () => {
                     },
                     actions: {
                         cardActionProps: 'actions',
-                        render: (data, row) => {
-                            return (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        boxSizing: 'border-box',
-                                        padding: '0 24px'
-                                    }}
-                                >
-                                    <span>作者：{row.user.username}</span>
-                                    <span>{row.count}次使用</span>
-                                </div>
-                            );
+                        render: () => {
+                            return [<a>上线</a>, <a>下线</a>];
                         }
                     }
                 }}

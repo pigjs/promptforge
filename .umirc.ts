@@ -38,5 +38,8 @@ export default defineConfig({
                 return [/moment[/\\]locale$/, /zh-cn/];
             });
     },
+    plugins: ['@umijs/plugins/dist/initial-state', '@umijs/plugins/dist/model'],
+    initialState: {},
+    model: {},
     ...config
 });

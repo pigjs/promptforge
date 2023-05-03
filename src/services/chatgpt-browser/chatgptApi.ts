@@ -14,7 +14,7 @@ export type CreateChatCompletionRequest = OCreateChatCompletionRequest & {
 };
 
 export type ChatGPTOptions = {
-    apiKey: string;
+    // apiKey: string;
     apiUrl?: string;
 };
 
@@ -23,16 +23,16 @@ export class ChatGPTApi {
     protected _apiUrl: string;
 
     constructor(options: ChatGPTOptions) {
-        const { apiKey, apiUrl = 'https://api.openai.com/v1/chat/completions' } = options;
-        this._apiKey = apiKey;
+        const { apiUrl = 'https://api.openai.com/v1/chat/completions' } = options;
+        // this._apiKey = apiKey;
         this._apiUrl = apiUrl;
 
-        if (!this._apiKey) {
-            throw new Error('OpenAI missing required apiKey');
-        }
+        // if (!this._apiKey) {
+        //     throw new Error('OpenAI missing required apiKey');
+        // }
     }
 
-    createChatCompletion = (options: CreateChatCompletionRequest) => {
+    createChatCompletion = (options: any) => {
         const { onProgress, ...resetOptions } = options;
         const abortController = new AbortController();
         const { signal } = abortController;
@@ -40,10 +40,10 @@ export class ChatGPTApi {
         const response = new Promise((resolve, reject) => {
             const url = this._apiUrl;
             const headers = {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${this._apiKey}`
+                'Content-Type': 'application/json'
+                // Authorization: `Bearer ${this._apiKey}`
             };
-            const body = JSON.stringify({ ...resetOptions, stream: true });
+            const body = JSON.stringify({ ...resetOptions });
             // @ts-ignore
             let result: OCreateChatCompletionResponse = {};
             let content = '';
