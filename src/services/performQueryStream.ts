@@ -25,7 +25,7 @@ export async function performQueryStream(options: PerformQueryOptionsType) {
     const { maxAttempts = 3, onProgress, id, userPromptOptions } = options;
     // const key = getOpenAIApiKey();
     // const model = getOpenAIModel();
-    const openai = new ChatGPTApi({ apiUrl: '/api/forge/completions' });
+    const openai = new ChatGPTApi({ apiUrl: '/api/forge/chat/completions' });
 
     for (let i = 0; i < maxAttempts; i++) {
         try {

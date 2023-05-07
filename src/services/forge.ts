@@ -98,3 +98,12 @@ export function approvePass(id: string) {
         data: { id }
     });
 }
+
+/** opanai 生成图片 */
+export function imagesGenerations(data = {}) {
+    return request({
+        url: '/api/forge/images/generations',
+        method: 'POST',
+        data
+    });
+}
