@@ -4,6 +4,7 @@ import { useMount } from '@pigjs/utils';
 import { Input } from 'antd';
 import React from 'react';
 import { history } from 'umi';
+// import loginDialog from '../../components/login';
 import FeatureList from './components/featureList';
 import TimeIndicator from './components/timeIndicator';
 
