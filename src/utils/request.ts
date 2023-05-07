@@ -1,17 +1,25 @@
+import loginDialog from '@/components/loginDialog';
 import { getToken } from '@/utils/token';
 import { setConfig, setMessage } from '@pigjs/request';
 import { message, Modal } from 'antd';
 import axios from 'axios';
 
+// 登录单例
+let loginInstance = false;
+
 // 初始化请求库配置
 setConfig({
     requestType: 'axios',
-    // errorCode: {
-    //     // 错误状态
-    //     401: () => {
-    //         // 未登录
-    //     }
-    // },
+    errorCode: {
+        // 错误状态
+        401: () => {
+            // 未登录
+            if (!loginInstance) {
+                loginDialog().show();
+                loginInstance = true;
+            }
+        }
+    },
     headers: () => {
         // headers 配置
         // 可以设置token等

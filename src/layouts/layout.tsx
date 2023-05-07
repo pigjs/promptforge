@@ -1,3 +1,6 @@
+import { useDialog } from '@/components/dialog';
+import loginDialog from '@/components/loginDialog';
+import { getUserInfo } from '@/utils/user';
 import { ProLayout } from '@ant-design/pro-components';
 import React from 'react';
 import { history, Link, Outlet, useLocation } from 'umi';
@@ -5,6 +8,12 @@ import { history, Link, Outlet, useLocation } from 'umi';
 export default () => {
     const location = useLocation();
     const { pathname } = location;
+
+    const [loginShow] = useDialog(loginDialog);
+
+    const userInfo = React.useMemo(() => {
+        return getUserInfo();
+    }, []);
 
     const defaultSettings = {
         colorPrimary: '#1677FF',
@@ -62,8 +71,14 @@ export default () => {
                             style={{
                                 color: '#dfdfdf'
                             }}
+                            onClick={() => {
+                                if (userInfo.username) {
+                                    return;
+                                }
+                                loginShow();
+                            }}
                         >
-                            七妮妮
+                            {userInfo.username ? userInfo.username : '未登录'}
                         </div>
                     )
                 }}

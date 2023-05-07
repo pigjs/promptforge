@@ -4,7 +4,7 @@ import { useMount } from '@pigjs/utils';
 import { Input } from 'antd';
 import React from 'react';
 import { history } from 'umi';
-import LoginInterface from '../../components/loginInterface';
+// import loginDialog from '../../components/login';
 import FeatureList from './components/featureList';
 import TimeIndicator from './components/timeIndicator';
 
@@ -55,7 +55,6 @@ const Index = () => {
             <div className={styles.featureList}>
                 <FeatureList dataSource={dataSource} />
             </div>
-            <LoginInterface />
         </div>
     );
 };
