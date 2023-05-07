@@ -1,23 +1,29 @@
 import { statusColorEnum, statusEnum } from '@/enums/feature';
-import { getUserForgeList } from '@/services/forge';
+import { approvePass, getAllList } from '@/services/forge';
 import { ProList } from '@ant-design/pro-components';
-import { Button, Space, Tag } from 'antd';
+import { message, Modal, Space, Tag } from 'antd';
 import React from 'react';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
+
+import type { ActionType } from '@ant-design/pro-components';
 
 const Index = () => {
     const { initialState } = useModel('@@initialState');
 
     const { categoryEnum, categoryColorEnum } = initialState;
 
+    const actionRef = React.useRef<ActionType>();
+
     const getData = async (params = {}) => {
         const { pageSize, current: pageNo, ...resetParams } = params;
         const data = {
             pageSize,
             pageNo,
-            ...resetParams
+            ...resetParams,
+            status: 4
         };
-        const res = await getUserForgeList(data);
+        // @ts-ignore
+        const res = await getAllList(data);
         return {
             data: res.data || [],
             success: true,
@@ -25,22 +31,27 @@ const Index = () => {
         };
     };
 
-    const openCreatePage = () => {
-        history.push('/forge/create');
+    const handleApprovePass = (id) => {
+        Modal.confirm({
+            title: '温馨提示',
+            content: '是否通过审核？',
+            onOk: async () => {
+                await approvePass(id);
+                await actionRef.current?.reload();
+                message.success('操作成功');
+            }
+        });
     };
 
     return (
         <div style={{ width: '70%', margin: '0 auto' }}>
             <ProList
+                actionRef={actionRef}
                 pagination={{}}
                 search={{}}
                 request={getData}
                 grid={{ gutter: 16, column: 2 }}
-                toolBarRender={() => [
-                    <Button type='primary' key='primary' onClick={openCreatePage}>
-                        创建应用
-                    </Button>
-                ]}
+                headerTitle='待审核应用'
                 metas={{
                     title: {
                         dataIndex: 'name',
@@ -70,17 +81,7 @@ const Index = () => {
                     actions: {
                         cardActionProps: 'actions',
                         render: (_data, row) => {
-                            const status = row.status as unknown as string;
-                            if (['1'].includes(status)) {
-                                return <div style={{ color: '#333' }}>{row.count}次使用</div>;
-                            }
-                            if (['2', '3'].includes(status)) {
-                                return <div onClick={() => history.push(`/forge/create?id=${row.id}`)}>编辑</div>;
-                            }
-                            if (['4'].includes(status)) {
-                                return <div style={{ color: '#333' }}>系统审核中，请耐心等待！</div>;
-                            }
-                            return null;
+                            return <div onClick={() => handleApprovePass(row.id)}>审核通过</div>;
                         }
                     }
                 }}

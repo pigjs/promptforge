@@ -14,7 +14,6 @@ export interface FormConfigProps {
 }
 
 const Index: DialogFC<FormConfigProps> = (props) => {
-    console.log(props, 'props');
     const { onClose, dataSource, initialValue } = props;
 
     const [form] = Form.useForm();
@@ -53,7 +52,6 @@ const Index: DialogFC<FormConfigProps> = (props) => {
                 const { options } = values;
                 values.options = options.map((item: any) => item.label);
             }
-            console.log(values, 'values');
             return values;
         }
         return {};

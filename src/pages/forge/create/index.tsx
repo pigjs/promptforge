@@ -3,10 +3,10 @@ import { useDialog } from '@/components/dialog';
 import FeatureIcon from '@/components/featureIcon';
 import Field from '@/components/field';
 import formConfigDialog from '@/components/formConfigDialog';
-import { createForge } from '@/services/forge';
+import { createForge, getEditDetail, saveDraft, updateForge } from '@/services/forge';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import EditOutlined from '@ant-design/icons/EditOutlined';
-import { omit, useSetState } from '@pigjs/utils';
+import { getUrlParam, isNil, omit, useMount, useSetState } from '@pigjs/utils';
 import { Button, Card, Form, Input, message, Modal, Select, Space } from 'antd';
 import React from 'react';
 import { useModel } from 'umi';
@@ -17,63 +17,17 @@ import styles from './index.less';
 
 const { TextArea } = Input;
 
-const defaultInitialValues = {
-    name: '命名工具',
-    description: '根据输入的参数和描述信息，生成对应的方法或变量名称',
-    icon: '命',
-    color: 'rgb(22, 129, 255)',
-    schema: [
-        {
-            name: 'namingStyle',
-            label: '命名规范',
-            valueType: 'Select',
-            fieldProps: {
-                style: {
-                    width: 160
-                },
-                options: [
-                    { label: '小驼峰命名法', value: '小驼峰命名法' },
-                    { label: '大驼峰命名法', value: '大驼峰命名法' },
-                    { label: '下划线命名法', value: '下划线命名法' },
-                    { label: '中划线命名法', value: '中划线命名法' }
-                ]
-            },
-            rules: [{ required: true, message: '请选择命名规范' }]
-        },
-        {
-            name: 'nameLength',
-            label: '命名长度不超过',
-            valueType: 'InputNumber',
-            fieldProps: {
-                min: 2,
-                max: 20,
-                style: {
-                    width: 120
-                }
-            },
-            rules: [{ required: true, message: '请设置命名长度' }]
-        }
-    ],
-    systemPrompt: `你是一个为程序员提供文件、方法、变量等命名的助手。
-        你将得到一个功能的描述信息，你需要通过描述信息，为他命名。
-        这是成功的例子：
-        我的功能描述是：是否是管理员。我的命名规范是：小驼峰。我的命名长度是：不超过10个字符。
-        你应该给我返回：
-        isAdmin
-        这是失败的例子：我的功能描述是：你知道 js Promise 吗?。
-        请输入正确的描述信息
-        成功的时候你必须始终只返回命名的名称,例如 “isAdmin” 这种格式，不要出现“你的建议”这种。否则你的响应将被标记为无效`,
-    userPrompt: `我的功能描述是：{{prompt}}。我的命名规范是：{{namingStyle}}；我的命名长度是。不超过{{nameLength}}个字符。`
-};
-
 const Index = () => {
+    const [id, setId] = React.useState(() => {
+        return getUrlParam('id');
+    });
+
+    const [detail, setDetail] = React.useState<any>(null);
+
     const [formConfigShow] = useDialog(formConfigDialog);
     const [state, setState] = useSetState<any>({
-        initialValues: {
-            namingStyle: '小驼峰命名法',
-            nameLength: 10
-        },
-        schema: defaultInitialValues.schema
+        initialValues: {},
+        schema: []
     });
 
     const { initialState } = useModel('@@initialState');
@@ -82,9 +36,42 @@ const Index = () => {
 
     const [form] = Form.useForm();
 
+    const getData = async () => {
+        if (!id) {
+            return;
+        }
+        const res = await getEditDetail(id);
+        const data = res.data || {};
+        const { initialValues, schema, prompt, ...resetData } = data;
+        try {
+            const resetInitialValues = initialValues ? JSON.parse(initialValues) : {};
+            const resetSchema = schema ? JSON.parse(schema) : [];
+            const resetPrompt: any = prompt ? JSON.parse(prompt) : {};
+            const { userPrompt = {}, systemPrompt = {} } = resetPrompt;
+            setDetail({
+                ...resetData,
+                userPrompt,
+                systemPrompt
+            });
+            setState({
+                initialValues: resetInitialValues,
+                schema: resetSchema
+            });
+        } catch (err) {
+            console.error('解析应用配置错误：', err);
+            Modal.error({
+                title: '温馨提示',
+                content: '解析应用配置错误，请刷新重试'
+            });
+        }
+    };
+
+    useMount(() => {
+        getData();
+    });
+
     const submit = async () => {
         const values = await form.validateFields();
-        console.log(values, 'values');
         const { systemPrompt, userPrompt, ...resetValues } = values;
         const data = {
             ...resetValues,
@@ -95,8 +82,38 @@ const Index = () => {
             schema: JSON.stringify(state.schema),
             initialValues: JSON.stringify(state.initialValues)
         };
-        await createForge(data);
-        message.success('创建成功');
+        if (id) {
+            await updateForge({ ...data, id });
+        } else {
+            await createForge(data);
+        }
+        message.success('提交成功');
+        history.back();
+    };
+
+    const preview = async () => {
+        const values = await form.validateFields();
+        const { systemPrompt, userPrompt, ...resetValues } = values;
+        const data = {
+            ...resetValues,
+            prompt: JSON.stringify({
+                systemPrompt,
+                userPrompt
+            }),
+            schema: JSON.stringify(state.schema),
+            initialValues: JSON.stringify(state.initialValues)
+        };
+        if (id) {
+            data.id = id;
+        }
+        const res = await saveDraft(data);
+        const forgeId = res.data;
+        setId(forgeId);
+        message.success('保存成功');
+        // 等 message 提示了之后再跳转，优化一下体验
+        setTimeout(() => {
+            window.open(`/feature?id=${id || forgeId}&preview=true`);
+        }, 100);
     };
 
     const name = Form.useWatch('name', { form });
@@ -105,7 +122,6 @@ const Index = () => {
 
     const handleFormConfig = (row?: FieldProps) => {
         const onOk = (item: FieldProps, initialValue?: string) => {
-            console.log(item, initialValue, 'ok');
             const { schema, initialValues } = state;
             const isNameDupList = schema.filter((it: any) => it.name === item.name);
             const len = row ? 2 : 1;
@@ -170,20 +186,23 @@ const Index = () => {
         color
     };
 
+    if (id && isNil(detail)) {
+        return null;
+    }
     return (
         <div className={styles.wrap}>
             <div className={styles.header}>
-                <div className={styles.title}>创建应用</div>
+                <div className={styles.title}>{id ? '编辑应用' : '创建应用'}</div>
                 <div style={{ marginLeft: 'auto' }}>
                     <Space>
-                        <Button>保存草稿箱</Button>
+                        <Button onClick={preview}>保存并预览</Button>
                         <Button type='primary' onClick={submit}>
                             提交
                         </Button>
                     </Space>
                 </div>
             </div>
-            <Form initialValues={defaultInitialValues} form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
+            <Form initialValues={detail} form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
                 <Space direction='vertical' size={16} style={{ width: '100%' }}>
                     <Card title='应用信息'>
                         <Form.Item label='应用名称' name='name' rules={[{ required: true, message: '请输入应用名称' }]}>

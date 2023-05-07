@@ -1,86 +1,130 @@
 import FieldRender from '@/components/fieldRender';
 import MessageList from '@/components/messageList';
-import { Divider, Input } from 'antd';
+import { useStorage } from '@/hooks/useStorge';
+import { performQueryStream } from '@/services/performQueryStream';
+import { isEnterKey } from '@/utils/keyCode';
+import { isString } from '@pigjs/utils';
+import { Divider, Input, Spin } from 'antd';
 import React from 'react';
+import ScrollableFeed from 'react-scrollable-feed';
 
 import styles from './index.less';
 
+import type { FieldProps } from '@/components/field';
+import type { MessageType } from '@/components/messageList';
+import type { BaseForge } from '@/services/types/forge';
 import type { FormInstance } from 'antd';
 
 const { TextArea } = Input;
 
-// const messageList = [
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     },
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     },
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     },
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     },
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     },
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     },
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     },
-//     {
-//         response: '要修改 Spin 组件的颜色，可以通过修改 Spin 组件的 spinClassName 属性来实现。具体的做法如下：',
-//         prompt: ' 什么是 React？'
-//     }
-// ];
+export interface PromptRenderProps {
+    promptInfo: Pick<BaseForge, 'id' | 'category' | 'count' | 'description' | 'icon' | 'color' | 'name' | 'user'> & {
+        initialValues?: Record<string, any>;
+        schema?: FieldProps[];
+    };
+    id: string;
+}
 
-const Index = (props) => {
-    const { promptInfo, messageList, onSend, stream, streamList, loading } = props;
+const Index = (props: PromptRenderProps) => {
+    const { promptInfo, id } = props;
+    const { schema, initialValues } = promptInfo;
 
     const fieldRenderRef = React.useRef<FormInstance>(null);
     const [value, setValue] = React.useState('');
+    const [loading, setLoading] = React.useState(false);
 
-    const onChange = (e) => {
+    const [streamMessage, setStreamMessage] = React.useState<MessageType>();
+    const [stream, setStream] = React.useState(false);
+    const [messageList = [], setMessageList] = useStorage<MessageType[]>(id);
+
+    const onChange = (e: any) => {
         const val = e.target.value;
         setValue(val);
     };
 
-    const onPressEnter = async (event: any) => {
-        if (event.keyCode === 13 && !event.shiftKey && value?.trim()) {
-            console.log(event, 'event');
-            event.preventDefault();
-            // 判断是否处于中文输入状态
-            if (event.target.composing) {
-                return;
-            }
-            const values = await fieldRenderRef.current?.validateFields();
-            onSend?.({ ...values, prompt: value });
-            setValue('');
-            // form.setFieldValue('prompt', '');
+    const onSend = async (values: Record<string, any>) => {
+        try {
+            // @ts-ignore
+            setMessageList((list = []) => [
+                ...list,
+                {
+                    role: 'user',
+                    content: values.prompt
+                }
+            ]);
+            setLoading(true);
+            const { response } = await performQueryStream({
+                id,
+                userPromptOptions: values,
+                onProgress: (content) => {
+                    setStreamMessage((state) => {
+                        const prevContent = state?.content || '';
+                        return {
+                            role: 'assistant',
+                            content: prevContent + content
+                        };
+                    });
+                    setStream(true);
+                    setLoading(false);
+                }
+            });
+            setStream(false);
+            setStreamMessage(undefined);
+            // @ts-ignore
+            setMessageList((list = []) => [
+                ...list,
+                {
+                    role: 'assistant',
+                    content: response
+                }
+            ]);
+            setLoading(false);
+        } catch (err) {
+            const error = isString(err) ? err : JSON.stringify(err);
+            setLoading(false);
+            // @ts-ignore
+            setMessageList((list = []) => [
+                ...list,
+                {
+                    role: 'assistant',
+                    error
+                }
+            ]);
+            setStream(false);
+            setStreamMessage(undefined);
         }
     };
+
+    const onPressEnter = async (event: any) => {
+        if (!value?.trim()) {
+            return;
+        }
+        if (!isEnterKey(event)) {
+            return;
+        }
+        const values = await fieldRenderRef.current?.validateFields();
+        onSend?.({ ...values, prompt: value });
+        setValue('');
+    };
+
+    const messageListProps = {
+        messageList,
+        stream,
+        streamMessage
+    };
+
     return (
         <div className={styles.promptRender}>
             <div className={styles.promptRender_left}>
                 <div className={styles.promptRender_left_title}>{promptInfo.name}</div>
                 <div className={styles.promptRender_left_description}>{promptInfo.description}</div>
                 <Divider />
-                {promptInfo.schema ? (
+                {schema ? (
                     <FieldRender
                         ref={fieldRenderRef}
                         layout='vertical'
-                        schema={promptInfo.schema}
-                        initialValues={promptInfo.initialValues}
+                        schema={schema}
+                        initialValues={initialValues}
                         labelCol={{ span: 10 }}
                         wrapperCol={{ span: 14 }}
                     />
@@ -89,8 +133,13 @@ const Index = (props) => {
             <Divider type='vertical' />
             <div className={styles.promptRender_right}>
                 <div className={styles.promptRender_right_messageList}>
-                    <MessageList loading={loading} messageList={messageList} stream={stream} streamList={streamList} />
+                    <Spin spinning={loading}>
+                        <ScrollableFeed>
+                            <MessageList {...messageListProps} />
+                        </ScrollableFeed>
+                    </Spin>
                 </div>
+
                 <div className={styles.promptRender_right_send}>
                     <TextArea
                         onKeyDown={onPressEnter}

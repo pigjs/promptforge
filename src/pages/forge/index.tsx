@@ -17,7 +17,6 @@ const Index = () => {
             ...resetParams
         };
         const res = await getForgeList(data);
-        console.log(res, 'res');
         return {
             data: res.data || [],
             success: true,

@@ -1,15 +1,8 @@
-import type { ProSettings } from '@ant-design/pro-components';
-import { ProLayout, SettingDrawer } from '@ant-design/pro-components';
-import React, { useState } from 'react';
+import { ProLayout } from '@ant-design/pro-components';
+import React from 'react';
 import { history, Link, Outlet, useLocation } from 'umi';
 
 export default () => {
-    const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
-        fixSiderbar: true,
-        layout: 'mix',
-        splitMenus: false
-    });
-
     const location = useLocation();
     const { pathname } = location;
 
@@ -75,11 +68,14 @@ export default () => {
                     )
                 }}
                 actionsRender={() => [
+                    <Link to='/forge/myWorkshop' key='myWorkshop'>
+                        我的工坊
+                    </Link>,
                     <Link to='/forge' key='forge'>
                         应用工坊
                     </Link>,
-                    <Link to='/forge/myWorkshop' key='myWorkshop'>
-                        我的工坊
+                    <Link to='/admin/forge' key='adminForge'>
+                        应用管理
                     </Link>
                 ]}
                 onMenuHeaderClick={() => history.push('/')}
@@ -98,16 +94,6 @@ export default () => {
                     <Outlet />
                 </div>
             </ProLayout>
-            <SettingDrawer
-                pathname={pathname}
-                enableDarkTheme
-                getContainer={() => document.getElementById('test-pro-layout')}
-                settings={settings}
-                onSettingChange={(changeSetting) => {
-                    setSetting(changeSetting);
-                }}
-                disableUrlParams={false}
-            />
         </div>
     );
 };

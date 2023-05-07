@@ -4,8 +4,8 @@
             color: #fff !important;
         }
     }
-    position: relative;
 
+    position: relative;
     display: flex;
     height: 100%;
     color: #fff;
@@ -35,6 +35,20 @@
             height: calc(100% - 60px);
             margin-bottom: 20px;
             overflow: auto;
+            :global {
+                .ant-spin-nested-loading {
+                    height: 100% !important;
+                }
+                .ant-spin-nested-loading .ant-spin-container {
+                    height: 100% !important;
+                }
+                .ant-spin-nested-loading .ant-spin-blur::after {
+                    opacity: 1 !important;
+                }
+                .ant-spin-nested-loading .ant-spin-container::after {
+                    background: none !important;
+                }
+            }
         }
         &_send {
             padding: 0 7vw;

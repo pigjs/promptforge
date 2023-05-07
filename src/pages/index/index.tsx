@@ -1,21 +1,24 @@
-import FeatureList from '@/components/featureList';
-import TimeIndicator from '@/components/timeIndicator';
 import { getForgeList } from '@/services/forge';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
 import { useMount } from '@pigjs/utils';
 import { Input } from 'antd';
 import React from 'react';
 import { history } from 'umi';
+import FeatureList from './components/featureList';
+import TimeIndicator from './components/timeIndicator';
+
+import type { ForgeListResponse } from '@/services/types/forge';
 
 import styles from './index.less';
 
 const { Search } = Input;
 
 const Index = () => {
-    const [dataSource, setDataSource] = React.useState();
+    const [dataSource, setDataSource] = React.useState<ForgeListResponse[]>([]);
 
     const getData = async () => {
-        const res = await getForgeList();
+        /** 刚开始应用不会很多的，先直接请求1000条数据 */
+        const res = await getForgeList({ pageNo: 1, pageSize: 1000 });
         const data = res.data || [];
         setDataSource(data);
     };
