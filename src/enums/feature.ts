@@ -6,3 +6,18 @@ export const colorEnum = {
     5: 'rgb(2, 51, 115)',
     6: 'rgb(200, 172, 112)'
 };
+
+/** 状态 */
+export const statusEnum = {
+    1: '已发布',
+    2: '已下线',
+    3: '草稿中',
+    4: '审核中'
+};
+
+export const statusColorEnum = {
+    1: colorEnum[1],
+    2: colorEnum[2],
+    3: colorEnum[3],
+    4: colorEnum[4]
+};

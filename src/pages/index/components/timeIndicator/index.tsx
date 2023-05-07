@@ -34,10 +34,10 @@ const Index = () => {
     return (
         <div className={styles.timeIndicator}>
             <div className={styles.timeIndicator_time}>
-                <span>{value.timeString}</span>
-                <span className={styles.timeIndicator_seconds}>
-                    {value.secondsString ? `:${value.secondsString}` : ''}
-                </span>
+                <div>{value.timeString}</div>
+                <div className={styles.timeIndicator_seconds}>
+                    {value.secondsString ? `: ${value.secondsString}` : ''}
+                </div>
             </div>
             <div className={styles.timeIndicator_date}>{value.dateString}</div>
         </div>

@@ -1,18 +1,23 @@
 .timeIndicator {
-    width: 300px;
+    min-width: 300px;
     margin: 0 auto;
     color: #fff;
     text-align: center;
+    opacity: 0.9;
     user-select: none;
 
     &_time {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        margin-bottom: 8px;
         padding-left: 35px;
         font-size: 80px;
-        line-height: 80px;
         text-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
     }
 
     &_seconds {
+        margin-left: 8px;
         font-size: 36px;
     }
 
@@ -20,6 +25,5 @@
         margin-top: -3px;
         line-height: 26px;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
-        opacity: 0.8;
     }
 }

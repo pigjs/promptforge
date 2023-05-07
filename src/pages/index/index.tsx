@@ -1,18 +1,33 @@
-import FeatureList from '@/components/featureList';
-import TimeIndicator from '@/components/timeIndicator';
-import { getFeatureCategory } from '@/utils/getFeature';
+import { getForgeList } from '@/services/forge';
 import SearchOutlined from '@ant-design/icons/SearchOutlined';
-import { getUrlParam, useUpdate } from '@pigjs/utils';
+import { useMount } from '@pigjs/utils';
 import { Input } from 'antd';
 import React from 'react';
-import { history, useLocation } from 'umi';
+import { history } from 'umi';
 import LoginInterface from '../../components/loginInterface';
+import FeatureList from './components/featureList';
+import TimeIndicator from './components/timeIndicator';
+
+import type { ForgeListResponse } from '@/services/types/forge';
 
 import styles from './index.less';
 
 const { Search } = Input;
 
 const Index = () => {
+    const [dataSource, setDataSource] = React.useState<ForgeListResponse[]>([]);
+
+    const getData = async () => {
+        /** 刚开始应用不会很多的，先直接请求1000条数据 */
+        const res = await getForgeList({ pageNo: 1, pageSize: 1000 });
+        const data = res.data || [];
+        setDataSource(data);
+    };
+
+    useMount(() => {
+        getData();
+    });
+
     const onSearch = (value: string) => {
         if (value?.trim()) {
             // @ts-ignore
@@ -20,24 +35,6 @@ const Index = () => {
             history.push('/feature?feature=questionAnswer');
         }
     };
-
-    const location = useLocation();
-    const update = useUpdate();
-
-    const role = getUrlParam('role') || 'home';
-
-    React.useEffect(() => {
-        update();
-    }, [location.search]);
-
-    const featureList = React.useMemo(() => {
-        // @ts-ignore
-        return getFeatureCategory(role);
-    }, [role]);
-
-    if (!role) {
-        return null;
-    }
 
     return (
         <div className={styles.page}>
@@ -56,7 +53,7 @@ const Index = () => {
                 />
             </div>
             <div className={styles.featureList}>
-                <FeatureList key={role} dataSource={featureList} />
+                <FeatureList dataSource={dataSource} />
             </div>
             <LoginInterface />
         </div>

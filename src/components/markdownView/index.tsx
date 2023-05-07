@@ -27,7 +27,7 @@ const Index = ({ source }: { source: string }) => {
                     />
                 </div>
             ) : (
-                <code {...props} className={className}>
+                <code {...props} className={className} style={{ color: '#fff' }}>
                     {children}
                 </code>
             );

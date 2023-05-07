@@ -1,84 +1,99 @@
-import SettingModal from '@/components/settingModal';
-import HomeOutlined from '@ant-design/icons/HomeOutlined';
-import SettingOutlined from '@ant-design/icons/SettingOutlined';
-import { getUrlParam } from '@pigjs/utils';
+import { ProLayout } from '@ant-design/pro-components';
 import React from 'react';
-import { history, Outlet } from 'umi';
+import { history, Link, Outlet, useLocation } from 'umi';
 
-import styles from './index.less';
+export default () => {
+    const location = useLocation();
+    const { pathname } = location;
 
-const navList = [
-    {
-        id: 'home',
-        title: '主页',
-        icon: <HomeOutlined className={styles.nav_item_icon} />,
-        path: '/?role=home'
-    }
-    // {
-    //     id: 'product',
-    //     title: '产品',
-    //     icon: <DesktopOutlined className={styles.nav_item_icon} />,
-    //     path: '/?role=product'
-    // },
-    // {
-    //     id: 'design',
-    //     title: '设计',
-    //     icon: <ToolOutlined className={styles.nav_item_icon} />,
-    //     path: '/?role=design'
-    // },
-    // {
-    //     id: 'other',
-    //     title: '其他',
-    //     icon: <FolderViewOutlined className={styles.nav_item_icon} />,
-    //     path: '/?role=other'
-    // }
-];
-
-const Index = () => {
-    const [open, setOpen] = React.useState(false);
-
-    const [current, setCurrent] = React.useState(() => {
-        return getUrlParam('role') || 'develop';
-    });
-
-    const openPage = (item: any) => {
-        setCurrent(item.id);
-        history.push(item.path);
-    };
-
-    const openSettingModal = () => {
-        setOpen(true);
+    const defaultSettings = {
+        colorPrimary: '#1677FF',
+        contentWidth: 'Fluid',
+        fixSiderbar: true,
+        layout: 'mix',
+        splitMenus: false,
+        menuHeaderRender: false,
+        navTheme: 'light',
+        fixedHeader: true,
+        menuRender: () => false
     };
 
     return (
-        <div>
-            <div className={styles.nav}>
-                <div className={styles.nav_top}>
-                    {navList.map((item) => (
+        <div id='test-pro-layout'>
+            {/* @ts-ignore */}
+            <ProLayout
+                title='Prompt-工坊'
+                token={{
+                    pageContainer: {
+                        colorBgPageContainer: '#444654'
+                    },
+                    header: {
+                        colorBgHeader: '#292f33',
+                        colorHeaderTitle: '#fff',
+                        colorTextMenu: '#dfdfdf',
+                        colorTextMenuSecondary: '#dfdfdf',
+                        colorTextMenuSelected: '#fff',
+                        colorBgMenuItemSelected: '#22272b',
+                        colorTextRightActionsItem: '#dfdfdf'
+                    },
+                    sider: {
+                        colorMenuBackground: '#292f33',
+                        colorTextMenuTitle: '#fff',
+                        colorMenuItemDivider: '#fff',
+                        colorTextMenuActive: '#fff',
+                        colorTextMenuItemHover: '#fff',
+                        colorTextMenu: '#fff',
+                        colorTextMenuSelected: 'rgba(42,122,251,1)',
+                        colorBgMenuItemSelected: '#fff',
+                        colorBgCollapsedButton: '#fff'
+                    }
+                }}
+                location={{
+                    pathname
+                }}
+                menu={{
+                    type: 'group'
+                }}
+                avatarProps={{
+                    src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
+                    size: 'small',
+                    title: (
                         <div
-                            key={item.title}
-                            className={`${styles.nav_item} ${current === item.id ? styles.nav_item_current : null}`}
-                            onClick={() => openPage(item)}
+                            style={{
+                                color: '#dfdfdf'
+                            }}
                         >
-                            {item.icon}
-                            <span className={styles.nav_item_text}>{item.title}</span>
+                            七妮妮
                         </div>
-                    ))}
+                    )
+                }}
+                actionsRender={() => [
+                    <Link to='/forge/myWorkshop' key='myWorkshop'>
+                        我的工坊
+                    </Link>,
+                    <Link to='/forge' key='forge'>
+                        应用工坊
+                    </Link>,
+                    <Link to='/admin/forge' key='adminForge'>
+                        应用管理
+                    </Link>
+                ]}
+                onMenuHeaderClick={() => history.push('/')}
+                menuItemRender={(item, dom) => (
+                    <a
+                        onClick={() => {
+                            history.push(item.path);
+                        }}
+                    >
+                        {dom}
+                    </a>
+                )}
+                {...defaultSettings}
+            >
+                <div style={{ minHeight: 'calc(100vh - 104px)' }}>
+                    <Outlet />
                 </div>
-                <div className={styles.nav_bottom}>
-                    <div className={styles.nav_item} onClick={openSettingModal}>
-                        <SettingOutlined className={styles.nav_item_icon} />
-                        <span className={styles.nav_item_text}>设置</span>
-                    </div>
-                </div>
-            </div>
-            <div className={styles.container}>
-                <Outlet />
-            </div>
-            <div className={styles.bg} />
-            <SettingModal open={open} closeOpen={() => setOpen(false)} />
+            </ProLayout>
         </div>
     );
 };
-
-export default Index;
