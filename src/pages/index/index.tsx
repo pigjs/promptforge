@@ -6,6 +6,7 @@ import { getUrlParam, useUpdate } from '@pigjs/utils';
 import { Input } from 'antd';
 import React from 'react';
 import { history, useLocation } from 'umi';
+import LoginInterface from '../../components/loginInterface';
 
 import styles from './index.less';
 
@@ -57,6 +58,7 @@ const Index = () => {
             <div className={styles.featureList}>
                 <FeatureList key={role} dataSource={featureList} />
             </div>
+            <LoginInterface />
         </div>
     );
 };
