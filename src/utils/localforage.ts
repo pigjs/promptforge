@@ -8,4 +8,13 @@ localforage.config({
     description: 'promptforge storge'
 });
 
-export default localforage;
+export const getStore = (name: string) => {
+    return localforage.createInstance({
+        name
+    });
+};
+
+export const clearStore = (name: string) => {
+    const store = getStore(name);
+    store.clear();
+};

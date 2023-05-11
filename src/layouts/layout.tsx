@@ -1,19 +1,36 @@
 import { useDialog } from '@/components/dialog';
 import loginDialog from '@/components/loginDialog';
+import { eventHub } from '@/utils/eventHub';
 import { getUserInfo } from '@/utils/user';
 import { ProLayout } from '@ant-design/pro-components';
+import { useEvent, useMount, useUnmount } from '@pigjs/utils';
+import { Modal } from 'antd';
 import React from 'react';
 import { history, Link, Outlet, useLocation } from 'umi';
+import Avatar from './avatar';
 
 export default () => {
     const location = useLocation();
     const { pathname } = location;
 
+    const [userInfo, setUserInfo] = React.useState(() => {
+        return getUserInfo();
+    });
+
+    const loginSuccess = useEvent(() => {
+        const userInfo = getUserInfo();
+        setUserInfo(userInfo);
+    });
+
     const [loginShow] = useDialog(loginDialog);
 
-    const userInfo = React.useMemo(() => {
-        return getUserInfo();
-    }, []);
+    useMount(() => {
+        eventHub.on('login', loginSuccess);
+    });
+
+    useUnmount(() => {
+        eventHub.off('login', loginSuccess);
+    });
 
     const defaultSettings = {
         colorPrimary: '#1677FF',
@@ -25,6 +42,22 @@ export default () => {
         navTheme: 'light',
         fixedHeader: true,
         menuRender: () => false
+    };
+
+    const openMyWorkshopPage = () => {
+        if (!userInfo.userId) {
+            Modal.confirm({
+                title: '温馨提示',
+                content: '您需要登录才能进入我的工坊。登录后，您可以访问更多功能和服务，以及享受更好的个性化体验',
+                okText: '前往登录',
+                cancelText: '取消',
+                onOk: () => {
+                    loginShow();
+                }
+            });
+        } else {
+            history.push('/forge/myWorkshop');
+        }
     };
 
     return (
@@ -64,34 +97,25 @@ export default () => {
                     type: 'group'
                 }}
                 avatarProps={{
-                    src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
-                    size: 'small',
-                    title: (
-                        <div
-                            style={{
-                                color: '#dfdfdf'
-                            }}
-                            onClick={() => {
-                                if (userInfo.username) {
-                                    return;
-                                }
-                                loginShow();
-                            }}
-                        >
-                            {userInfo.username ? userInfo.username : '未登录'}
-                        </div>
-                    )
+                    render: () => {
+                        return <Avatar userInfo={userInfo} />;
+                    }
                 }}
                 actionsRender={() => [
-                    <Link to='/forge/myWorkshop' key='myWorkshop'>
-                        我的工坊
+                    <Link to='/' key='home'>
+                        首页
                     </Link>,
                     <Link to='/forge' key='forge'>
                         应用工坊
                     </Link>,
-                    <Link to='/admin/forge' key='adminForge'>
-                        应用管理
-                    </Link>
+                    <a onClick={openMyWorkshopPage} key='myWorkshop'>
+                        我的工坊
+                    </a>,
+                    userInfo.username === '18268937872' ? (
+                        <Link to='/admin/forge' key='adminForge'>
+                            应用管理
+                        </Link>
+                    ) : null
                 ]}
                 onMenuHeaderClick={() => history.push('/')}
                 menuItemRender={(item, dom) => (

@@ -15,7 +15,7 @@ setConfig({
         401: () => {
             // 未登录
             if (!loginInstance) {
-                loginDialog().show();
+                loginDialog().show({ onOk: () => setTimeout(() => location.reload(), 300) });
                 loginInstance = true;
             }
         }

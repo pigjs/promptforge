@@ -1,9 +1,14 @@
+import { useDialog } from '@/components/dialog';
 import FieldRender from '@/components/fieldRender';
+import loginDialog from '@/components/loginDialog';
 import MessageList from '@/components/messageList';
-import { useStorage } from '@/hooks/useStorge';
+import { usePromptStorage } from '@/hooks/usePromptStorage';
+import { usePrompt } from '@/hooks/userPrompt';
 import { performQueryStream } from '@/services/performQueryStream';
+import { eventHub } from '@/utils/eventHub';
 import { isEnterKey } from '@/utils/keyCode';
-import { isString } from '@pigjs/utils';
+import { getUserInfo } from '@/utils/user';
+import { isString, useEvent, useMount, useUnmount } from '@pigjs/utils';
 import { Divider, Input, Spin } from 'antd';
 import React from 'react';
 import ScrollableFeed from 'react-scrollable-feed';
@@ -25,6 +30,12 @@ export interface PromptRenderProps {
     id: string;
 }
 
+const promptOptions = {
+    content: '您当前处于未登录状态，离开页面后，您的聊天记录将不会保存。如果您希望保存聊天记录，请登录后再离开页面',
+    okText: '前往登录',
+    cancelText: '仍然离开'
+};
+
 const Index = (props: PromptRenderProps) => {
     const { promptInfo, id } = props;
     const { schema, initialValues } = promptInfo;
@@ -35,7 +46,37 @@ const Index = (props: PromptRenderProps) => {
 
     const [streamMessage, setStreamMessage] = React.useState<MessageType>();
     const [stream, setStream] = React.useState(false);
-    const [messageList = [], setMessageList] = useStorage<MessageType[]>(id);
+    const [messageList = [], setMessageList, loginSetState] = usePromptStorage(id);
+
+    const [loginShow] = useDialog(loginDialog);
+
+    const loginSuccess = useEvent(() => {
+        loginSetState();
+    });
+
+    useMount(() => {
+        eventHub.on('login', loginSuccess);
+    });
+
+    useUnmount(() => {
+        eventHub.off('login', loginSuccess);
+    });
+
+    const { cancelUnblock } = usePrompt({
+        ...promptOptions,
+        onOk: (_actionCallback, cancelUnblock) => {
+            loginShow({ onOk: cancelUnblock });
+        },
+        onCancel: (actionCallback) => actionCallback()
+    });
+
+    useMount(() => {
+        const userInfo = getUserInfo();
+        // 已经登录的，取消页面拦截
+        if (userInfo.userId) {
+            cancelUnblock();
+        }
+    });
 
     const onChange = (e: any) => {
         const val = e.target.value;

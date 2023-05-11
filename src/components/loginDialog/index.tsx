@@ -1,10 +1,13 @@
 import { dialog } from '@/components/dialog';
 import { login, register } from '@/services/user';
+import { eventHub } from '@/utils/eventHub';
 import { setToken } from '@/utils/token';
 import { setUserInfo } from '@/utils/user';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message, Modal } from 'antd';
 import React from 'react';
+
+import type { DialogFC } from '@/components/dialog';
 
 import styles from './index.less';
 
@@ -27,11 +30,22 @@ const activeEnum = {
 
 type ActiveType = keyof typeof activeEnum;
 
-const Index = (props) => {
+export type LoginProps = {
+    /** 登录成功回调 不传默认 刷新页面 */
+    onOk?: () => Promise<void> | void;
+};
+
+const Index: DialogFC<LoginProps> = (props) => {
     const { onClose } = props;
 
     const [loading, setLoading] = React.useState(false);
     const [active, setActive] = React.useState<ActiveType>('login');
+
+    const onOk = async () => {
+        await props.onOk?.();
+        eventHub.emit('login');
+        onClose();
+    };
 
     const onFinish = async (values: any) => {
         const { password, username } = values;
@@ -51,10 +65,7 @@ const Index = (props) => {
             setLoading(false);
 
             message.success(activeEnum[active].successText);
-
-            setTimeout(() => {
-                location.reload();
-            }, 100);
+            onOk();
         } catch (err) {
             console.error(err);
             setLoading(false);
