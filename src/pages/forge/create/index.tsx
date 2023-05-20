@@ -107,7 +107,10 @@ const Index = () => {
             data.id = id;
         }
         const res = await saveDraft(data);
-        const forgeId = res.data;
+        const forge = res.data || {};
+        const { id: forgeId } = forge;
+        console.log(forgeId, 'forgeId');
+        console.log(typeof forgeId);
         setId(forgeId);
         message.success('保存成功');
         // 等 message 提示了之后再跳转，优化一下体验
@@ -202,7 +205,12 @@ const Index = () => {
                     </Space>
                 </div>
             </div>
-            <Form initialValues={detail} form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 20 }}>
+            <Form
+                initialValues={detail || { color: '#1681ff' }}
+                form={form}
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 20 }}
+            >
                 <Space direction='vertical' size={16} style={{ width: '100%' }}>
                     <Card title='应用信息'>
                         <Form.Item label='应用名称' name='name' rules={[{ required: true, message: '请输入应用名称' }]}>

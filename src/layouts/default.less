@@ -178,10 +178,21 @@ html {
 body {
     height: 100%;
     min-height: 100%;
-    color: #333;
+    // color: #333;
     font-family: 'PingFang SC';
     word-break: break-all;
-    background: #444654;
+    // background: #444654;
+    // background: #191a23;
     -webkit-text-size-adjust: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+button, input[type="button"], input[type="submit"], input[type="reset"] {
+    /* 取消默认自动聚焦 */
+    autofocus: false;
+    
+    /* 或者取消默认焦点效果 */
+    :focus {
+      outline: none;
+    }
 }

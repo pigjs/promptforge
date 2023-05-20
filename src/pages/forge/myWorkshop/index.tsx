@@ -1,4 +1,5 @@
 import { statusColorEnum, statusEnum } from '@/enums/feature';
+import { useLogin } from '@/hooks/useLogin';
 import { getUserForgeList } from '@/services/forge';
 import { ProList } from '@ant-design/pro-components';
 import { Button, Space, Tag } from 'antd';
@@ -25,9 +26,12 @@ const Index = () => {
         };
     };
 
-    const openCreatePage = () => {
-        history.push('/forge/create');
-    };
+    const openCreatePage = useLogin(
+        () => {
+            history.push('/forge/create');
+        },
+        { content: '您需要登录才能创建应用。登录后，您可以访问更多功能和服务，以及享受更好的个性化体验' }
+    );
 
     return (
         <div style={{ width: '70%', margin: '0 auto' }}>
@@ -35,7 +39,7 @@ const Index = () => {
                 pagination={{}}
                 search={{}}
                 request={getData}
-                grid={{ gutter: 16, column: 2 }}
+                grid={{ gutter: 16, column: 3 }}
                 toolBarRender={() => [
                     <Button type='primary' key='primary' onClick={openCreatePage}>
                         创建应用

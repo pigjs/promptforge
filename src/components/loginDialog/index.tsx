@@ -37,6 +37,7 @@ export type LoginProps = {
 
 const Index: DialogFC<LoginProps> = (props) => {
     const { onClose } = props;
+    console.log('props', props);
 
     const [loading, setLoading] = React.useState(false);
     const [active, setActive] = React.useState<ActiveType>('login');

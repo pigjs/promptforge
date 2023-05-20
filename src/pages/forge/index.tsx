@@ -34,12 +34,13 @@ const Index = () => {
                 pagination={{}}
                 search={{}}
                 request={getData}
-                grid={{ gutter: 16, column: 2 }}
+                grid={{ gutter: 16, column: 3 }}
                 toolBarRender={() => [
                     <Button type='primary' key='primary' onClick={openCreatePage}>
                         创建应用
                     </Button>
                 ]}
+                // itemCardProps={{ ghost: true }}
                 metas={{
                     title: {
                         dataIndex: 'name',

@@ -18,7 +18,7 @@ const config = {
             username: 'root', // 登录服务器用户名 必填
             privateKey: '~/.ssh/id_rsa', // 登录服务器密钥
             // passphrase: 'xxx', // 密钥密码
-            webDir: '/opt/web/codehub'
+            webDir: '/opt/pig/promptforge'
         }
     ]
 };

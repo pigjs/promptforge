@@ -16,7 +16,11 @@ const Index = (props: FeatureIconProps) => {
     return (
         <div className={styles.featureIcon} onClick={onClick}>
             <div className={styles.featureIcon_icon} style={{ backgroundColor: color }}>
-                {isImageUrl(icon) ? <img src={icon} /> : <span className={styles.featureIcon_icon_text}>{icon}</span>}
+                {isImageUrl(icon) ? (
+                    <img className={styles.featureIcon_icon_img} src={icon} />
+                ) : (
+                    <span className={styles.featureIcon_icon_text}>{icon}</span>
+                )}
             </div>
             <div className={styles.featureIcon_name}>{name}</div>
         </div>

@@ -47,7 +47,7 @@ export function saveDraft(data: SaveDraftForgeRequest) {
         url: '/api/forge/draft',
         method: 'POST',
         data
-    }) as BaseResponse<string>;
+    }) as BaseResponse<{ id: string }>;
 }
 
 /** 更新应用 */

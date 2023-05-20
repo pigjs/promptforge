@@ -1,8 +1,9 @@
 import loginDialog from '@/components/loginDialog';
-import { getToken } from '@/utils/token';
+import { clearToken, getToken } from '@/utils/token';
 import { setConfig, setMessage } from '@pigjs/request';
 import { message, Modal } from 'antd';
 import axios from 'axios';
+import { clearUserInfo } from './user';
 
 // 登录单例
 let loginInstance = false;
@@ -10,9 +11,12 @@ let loginInstance = false;
 // 初始化请求库配置
 setConfig({
     requestType: 'axios',
+    successCode: [200, 201, 204],
     errorCode: {
         // 错误状态
         401: () => {
+            clearToken();
+            clearUserInfo();
             // 未登录
             if (!loginInstance) {
                 loginDialog().show({ onOk: () => setTimeout(() => location.reload(), 300) });

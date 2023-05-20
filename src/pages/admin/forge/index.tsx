@@ -50,7 +50,7 @@ const Index = () => {
                 pagination={{}}
                 search={{}}
                 request={getData}
-                grid={{ gutter: 16, column: 2 }}
+                grid={{ gutter: 16, column: 3 }}
                 headerTitle='待审核应用'
                 metas={{
                     title: {

@@ -1,10 +1,8 @@
-import { useDialog } from '@/components/dialog';
-import loginDialog from '@/components/loginDialog';
+import { useLogin } from '@/hooks/useLogin';
 import { eventHub } from '@/utils/eventHub';
 import { getUserInfo } from '@/utils/user';
 import { ProLayout } from '@ant-design/pro-components';
 import { useEvent, useMount, useUnmount } from '@pigjs/utils';
-import { Modal } from 'antd';
 import React from 'react';
 import { history, Link, Outlet, useLocation } from 'umi';
 import Avatar from './avatar';
@@ -22,8 +20,6 @@ export default () => {
         setUserInfo(userInfo);
     });
 
-    const [loginShow] = useDialog(loginDialog);
-
     useMount(() => {
         eventHub.on('login', loginSuccess);
     });
@@ -33,7 +29,7 @@ export default () => {
     });
 
     const defaultSettings = {
-        colorPrimary: '#1677FF',
+        // colorPrimary: '#1677FF',
         contentWidth: 'Fluid',
         fixSiderbar: true,
         layout: 'mix',
@@ -44,21 +40,12 @@ export default () => {
         menuRender: () => false
     };
 
-    const openMyWorkshopPage = () => {
-        if (!userInfo.userId) {
-            Modal.confirm({
-                title: '温馨提示',
-                content: '您需要登录才能进入我的工坊。登录后，您可以访问更多功能和服务，以及享受更好的个性化体验',
-                okText: '前往登录',
-                cancelText: '取消',
-                onOk: () => {
-                    loginShow();
-                }
-            });
-        } else {
+    const openMyWorkshopPage = useLogin(
+        () => {
             history.push('/forge/myWorkshop');
-        }
-    };
+        },
+        { content: '您需要登录才能进入我的应用。登录后，您可以访问更多功能和服务，以及享受更好的个性化体验' }
+    );
 
     return (
         <div id='test-pro-layout'>
@@ -106,10 +93,10 @@ export default () => {
                         首页
                     </Link>,
                     <Link to='/forge' key='forge'>
-                        应用工坊
+                        工作台
                     </Link>,
                     <a onClick={openMyWorkshopPage} key='myWorkshop'>
-                        我的工坊
+                        我的应用
                     </a>,
                     userInfo.username === '18268937872' ? (
                         <Link to='/admin/forge' key='adminForge'>

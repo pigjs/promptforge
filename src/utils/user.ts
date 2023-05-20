@@ -27,3 +27,7 @@ export function setUserInfo(userInfo: UserInfo) {
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
     }
 }
+/** 删除用户信息 */
+export function clearUserInfo() {
+    localStorage.removeItem('userInfo');
+}

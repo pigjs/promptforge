@@ -50,7 +50,16 @@ const Index = (props: PromptRenderProps) => {
 
     const [loginShow] = useDialog(loginDialog);
 
+    const { cancelUnblock } = usePrompt({
+        ...promptOptions,
+        onOk: () => {
+            loginShow();
+        },
+        onCancel: (actionCallback) => actionCallback()
+    });
+
     const loginSuccess = useEvent(() => {
+        cancelUnblock();
         loginSetState();
     });
 
@@ -60,14 +69,6 @@ const Index = (props: PromptRenderProps) => {
 
     useUnmount(() => {
         eventHub.off('login', loginSuccess);
-    });
-
-    const { cancelUnblock } = usePrompt({
-        ...promptOptions,
-        onOk: (_actionCallback, cancelUnblock) => {
-            loginShow({ onOk: cancelUnblock });
-        },
-        onCancel: (actionCallback) => actionCallback()
     });
 
     useMount(() => {
