@@ -136,8 +136,10 @@ const Index: DialogFC<LoginProps> = (props) => {
                         </Button>
                     </Form.Item>
                 </Form>
-                <div className={styles.login_footer} onClick={() => setActive(activeEnum[active].setActiveText)}>
-                    {activeEnum[active].footerText}
+                <div className={styles.login_footer}>
+                    <a className={styles.login_footer_text} onClick={() => setActive(activeEnum[active].setActiveText)}>
+                        {activeEnum[active].footerText}
+                    </a>
                 </div>
             </div>
         </Modal>

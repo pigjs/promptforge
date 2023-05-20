@@ -40,6 +40,9 @@ const Index = () => {
                         创建应用
                     </Button>
                 ]}
+                onItem={(item) => ({
+                    onClick: () => history.push(`/feature?id=${item.id}`)
+                })}
                 // itemCardProps={{ ghost: true }}
                 metas={{
                     title: {

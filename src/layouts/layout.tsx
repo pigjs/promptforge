@@ -57,16 +57,16 @@ export default () => {
                         colorBgPageContainer: '#444654'
                     },
                     header: {
-                        colorBgHeader: '#292f33',
+                        colorBgHeader: '#202123',
                         colorHeaderTitle: '#fff',
                         colorTextMenu: '#dfdfdf',
                         colorTextMenuSecondary: '#dfdfdf',
                         colorTextMenuSelected: '#fff',
-                        colorBgMenuItemSelected: '#22272b',
+                        colorBgMenuItemSelected: '#202123',
                         colorTextRightActionsItem: '#dfdfdf'
                     },
                     sider: {
-                        colorMenuBackground: '#292f33',
+                        colorMenuBackground: '#202123',
                         colorTextMenuTitle: '#fff',
                         colorMenuItemDivider: '#fff',
                         colorTextMenuActive: '#fff',
@@ -89,9 +89,6 @@ export default () => {
                     }
                 }}
                 actionsRender={() => [
-                    <Link to='/' key='home'>
-                        首页
-                    </Link>,
                     <Link to='/forge' key='forge'>
                         工作台
                     </Link>,
