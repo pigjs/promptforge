@@ -8,7 +8,7 @@ import { performQueryStream } from '@/services/performQueryStream';
 import { eventHub } from '@/utils/eventHub';
 import { isEnterKey } from '@/utils/keyCode';
 import { getUserInfo } from '@/utils/user';
-import { isString, useEvent, useMount, useUnmount } from '@pigjs/utils';
+import { isString, useEvent, useMount, useUnmount, useUrlParam } from '@pigjs/utils';
 import { Divider, Input, Spin } from 'antd';
 import React from 'react';
 import ScrollableFeed from 'react-scrollable-feed';
@@ -46,7 +46,8 @@ const Index = (props: PromptRenderProps) => {
 
     const [streamMessage, setStreamMessage] = React.useState<MessageType>();
     const [stream, setStream] = React.useState(false);
-    const [messageList = [], setMessageList, loginSetState] = usePromptStorage(id);
+    const preview = useUrlParam('preview');
+    const [messageList = [], setMessageList, loginSetState] = usePromptStorage(id, preview !== 'true');
 
     const [loginShow] = useDialog(loginDialog);
 
@@ -159,7 +160,14 @@ const Index = (props: PromptRenderProps) => {
         <div className={styles.promptRender}>
             <div className={styles.promptRender_left}>
                 <div className={styles.promptRender_left_title}>{promptInfo.name}</div>
-                <div className={styles.promptRender_left_description}>{promptInfo.description}</div>
+                <div className={styles.promptRender_left_description}>
+                    {/* {promptInfo.description?.length > 80 ? (
+                        <Tooltip title={promptInfo.description}>{promptInfo.description.slice(0, 80)}...</Tooltip>
+                    ) : (
+                        promptInfo.description
+                    )} */}
+                    {promptInfo.description}
+                </div>
                 <Divider />
                 {schema ? (
                     <FieldRender
@@ -167,8 +175,7 @@ const Index = (props: PromptRenderProps) => {
                         layout='vertical'
                         schema={schema}
                         initialValues={initialValues}
-                        labelCol={{ span: 10 }}
-                        wrapperCol={{ span: 14 }}
+                        wrapperCol={{ span: 24 }}
                     />
                 ) : null}
             </div>

@@ -9,11 +9,11 @@ const getKey = (key: string, userId: string) => {
     return `${key}_${userId}`;
 };
 
-export function usePromptStorage(key: string) {
+export function usePromptStorage(key: string, isStore = true) {
     const [state, setState] = React.useState<MessageType[]>([]);
     const getData = async () => {
         const userInfo = getUserInfo();
-        if (userInfo.userId) {
+        if (userInfo.userId && isStore) {
             const storageKey = getKey(key, userInfo.userId);
             const store = getStore(userInfo.userId);
             const data = await store.getItem<MessageType[]>(storageKey);
@@ -29,7 +29,7 @@ export function usePromptStorage(key: string) {
         const value = isFunction(data) ? data(state) : data;
         setState(value);
         const userInfo = getUserInfo();
-        if (userInfo.userId) {
+        if (userInfo.userId && isStore) {
             const storageKey = getKey(key, userInfo.userId);
             const store = getStore(userInfo.userId);
             store.setItem<MessageType[]>(storageKey, value);
@@ -39,7 +39,7 @@ export function usePromptStorage(key: string) {
     /** 登录后合并当前状态和本地状态 */
     const loginSetState = useEvent(async () => {
         const userInfo = getUserInfo();
-        if (userInfo.userId) {
+        if (userInfo.userId && isStore) {
             const storageKey = getKey(key, userInfo.userId);
             const store = getStore(userInfo.userId);
             const data = (await store.getItem<MessageType[]>(storageKey)) || [];

@@ -1,12 +1,14 @@
 import Color from '@/components/color';
 import FieldList from '@/components/fieldList';
-import { Checkbox, Form, Input, InputNumber, Select } from 'antd';
+import { Form, Input, InputNumber, Select } from 'antd';
 import React from 'react';
+import Checkbox from './checkbox';
 
 import type { ColorProps } from '@/components/color';
 import type { FieldListProps } from '@/components/fieldList';
-import type { CheckboxProps, FormItemProps, InputNumberProps, InputProps, SelectProps } from 'antd';
+import type { FormItemProps, InputNumberProps, InputProps, SelectProps } from 'antd';
 import type { TextAreaProps } from 'antd/es/input/TextArea';
+import type { CheckboxProps } from './checkbox';
 
 const { TextArea } = Input;
 

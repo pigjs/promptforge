@@ -1,5 +1,6 @@
 import { dialog } from '@/components/dialog';
 import FieldRender from '@/components/fieldRender';
+import { generateId } from '@/utils/generateId';
 import { Form, Modal, Select } from 'antd';
 import React from 'react';
 import { basePropsConfig, propsConfigEnum, selectComp } from './data';
@@ -9,7 +10,7 @@ import type { FieldProps } from '@/components/field';
 
 export interface FormConfigProps {
     onOk: (item: FieldProps, initialValue: string) => void | Promise<void>;
-    dataSource: FieldProps;
+    dataSource?: FieldProps;
     initialValue: string;
 }
 
@@ -43,7 +44,7 @@ const Index: DialogFC<FormConfigProps> = (props) => {
             };
             if (rules) {
                 const [requiredRule] = rules;
-                values.required = requiredRule?.message;
+                values.required = !!requiredRule?.message;
             }
             if (valueType === 'Select') {
                 if (values.mode === 'multiple') {
@@ -60,7 +61,6 @@ const Index: DialogFC<FormConfigProps> = (props) => {
     const onOk = async () => {
         const values = await form.validateFields();
         const { name, label, valueType, required, initialValue, ...resetValues } = values;
-
         const rules = required ? [{ required: true, message: `${label}不能为空` }] : undefined;
 
         const item: FieldProps = {
@@ -81,7 +81,15 @@ const Index: DialogFC<FormConfigProps> = (props) => {
                 options: resetOptions
             };
         }
+        if (valueType === 'TextArea') {
+            fieldProps = {
+                ...fieldProps,
+                autoSize: { minRows: 3, maxRows: 6 }
+            };
+            item.width = 292;
+        }
         item.fieldProps = fieldProps;
+        item.id = dataSource?.id || generateId();
         await props.onOk(item, initialValue);
         onClose();
     };

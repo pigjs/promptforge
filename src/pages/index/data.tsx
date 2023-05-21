@@ -6,7 +6,12 @@ export const Nav00DataSource = {
     page: { className: 'home-page' },
     logo: {
         className: 'header0-logo',
-        children: 'https://os.alipayobjects.com/rmsportal/mlcYmsRilwraoAe.svg'
+        children: (
+            <div style={{ display: 'flex', alignItems: 'center', height: 56 }}>
+                <img src='/logo.png' style={{ width: 28, height: 28 }} />
+                <h1 style={{ fontSize: 18, color: '#fff', fontWeight: 600, marginLeft: 8 }}>Prompt-工坊</h1>
+            </div>
+        )
     },
     Menu: {
         className: 'header0-menu',
@@ -123,8 +128,8 @@ export const Content50DataSource = {
             { name: 'title', children: '应用案例', className: 'title-h1' },
             {
                 name: 'content',
-                className: 'title-content',
-                children: '在这里用一段话介绍服务的案例情况'
+                className: 'title-content'
+                // children: '在这里用一段话介绍服务的案例情况'
             }
         ]
     },
@@ -140,9 +145,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://t.alipayobjects.com/images/rmsweb/T11aVgXc4eXXXXXXXX.svg'
+                        children: '/app_1.png'
                     },
-                    content: { children: 'Ant Design' }
+                    content: { children: '命名工具' }
                 }
             },
             {
@@ -153,9 +158,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://zos.alipayobjects.com/rmsportal/faKjZtrmIbwJvVR.svg'
+                        children: '/app_2.png'
                     },
-                    content: { children: 'Ant Motion' }
+                    content: { children: 'gitCommit生成器' }
                 }
             },
             {
@@ -166,9 +171,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://t.alipayobjects.com/images/rmsweb/T11aVgXc4eXXXXXXXX.svg'
+                        children: '/app_3.png'
                     },
-                    content: { children: 'Ant Design' }
+                    content: { children: '智能翻译助手' }
                 }
             },
             {
@@ -179,9 +184,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://zos.alipayobjects.com/rmsportal/faKjZtrmIbwJvVR.svg'
+                        children: '/app_4.png'
                     },
-                    content: { children: 'Ant Motion' }
+                    content: { children: '简历优化助手' }
                 }
             },
             {
@@ -192,9 +197,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://t.alipayobjects.com/images/rmsweb/T11aVgXc4eXXXXXXXX.svg'
+                        children: '/app_5.png'
                     },
-                    content: { children: 'Ant Design' }
+                    content: { children: '模拟面试工具' }
                 }
             },
             {
@@ -205,9 +210,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://zos.alipayobjects.com/rmsportal/faKjZtrmIbwJvVR.svg'
+                        children: '/app_6.png'
                     },
-                    content: { children: 'Ant Motion' }
+                    content: { children: '写作神器' }
                 }
             },
             {
@@ -218,9 +223,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://t.alipayobjects.com/images/rmsweb/T11aVgXc4eXXXXXXXX.svg'
+                        children: '/app_7.png'
                     },
-                    content: { children: 'Ant Design' }
+                    content: { children: '标题智能生成' }
                 }
             },
             {
@@ -231,9 +236,9 @@ export const Content50DataSource = {
                 children: {
                     wrapper: { className: 'content5-block-content' },
                     img: {
-                        children: 'https://zos.alipayobjects.com/rmsportal/faKjZtrmIbwJvVR.svg'
+                        children: '/app_8.png'
                     },
-                    content: { children: 'Ant Motion' }
+                    content: { children: '智能化报告生成' }
                 }
             }
         ]

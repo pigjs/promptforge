@@ -19,16 +19,16 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
     try {
         res = await fetch(url, fetchOptions);
     } catch (err) {
-        onError('ChatGPT error');
+        onError('网络繁忙，请稍后再试1');
         return;
     }
     if (!res.ok) {
-        let reason: string;
+        // let reason: string;
         try {
-            reason = await res.text();
+            await res.text();
         } catch (err) {
-            reason = res.statusText;
-            const msg = `ChatGPT error ${res.status}: ${reason}`;
+            // reason = res.statusText;
+            const msg = `网络繁忙，请稍后再试2`;
             onError(msg);
             return;
         }
@@ -42,11 +42,11 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
         let response = null;
         try {
             response = JSON.parse(chunk);
-        } catch {
+        } catch (err) {
             // ignore
         }
         if (response?.detail?.type === 'invalid_request_error') {
-            const error = `ChatGPT error ${response.detail.message}: ${response.detail.code} (${response.detail.type})`;
+            const error = `网络繁忙，请稍后再试4`;
 
             onError(error);
             // don't feed to the event parser
@@ -56,7 +56,7 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
     };
 
     if (res.body?.locked) {
-        const error = `ChatGPT error`;
+        const error = `网络繁忙，请稍后再试5`;
         onError(error);
         return;
     }

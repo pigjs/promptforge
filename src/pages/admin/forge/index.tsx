@@ -5,6 +5,8 @@ import { message, Modal, Space, Tag } from 'antd';
 import React from 'react';
 import { useModel } from 'umi';
 
+import styles from './index.less';
+
 import type { ActionType } from '@ant-design/pro-components';
 
 const Index = () => {
@@ -44,7 +46,7 @@ const Index = () => {
     };
 
     return (
-        <div style={{ width: '70%', margin: '0 auto' }}>
+        <div className={styles.page}>
             <ProList
                 actionRef={actionRef}
                 pagination={{}}
@@ -74,7 +76,11 @@ const Index = () => {
                     content: {
                         dataIndex: 'description',
                         render: (data) => {
-                            return <div style={{ height: 50, overflow: 'auto' }}>{data}</div>;
+                            return (
+                                <div className='ellipsis_3' style={{ minHeight: 66 }}>
+                                    {data}
+                                </div>
+                            );
                         },
                         search: false
                     },

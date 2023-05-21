@@ -6,7 +6,7 @@ import formConfigDialog from '@/components/formConfigDialog';
 import { createForge, getEditDetail, saveDraft, updateForge } from '@/services/forge';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import EditOutlined from '@ant-design/icons/EditOutlined';
-import { getUrlParam, isNil, omit, useMount, useSetState } from '@pigjs/utils';
+import { getUrlParam, isNil, omit, useMount, useSetState, useUrlParam } from '@pigjs/utils';
 import { Button, Card, Form, Input, message, Modal, Select, Space } from 'antd';
 import React from 'react';
 import { useModel } from 'umi';
@@ -18,9 +18,11 @@ import styles from './index.less';
 const { TextArea } = Input;
 
 const Index = () => {
-    const [id, setId] = React.useState(() => {
+    const [forgeId, setForgeId] = React.useState(() => {
         return getUrlParam('id');
     });
+
+    const id = useUrlParam('id');
 
     const [detail, setDetail] = React.useState<any>(null);
 
@@ -82,8 +84,9 @@ const Index = () => {
             schema: JSON.stringify(state.schema),
             initialValues: JSON.stringify(state.initialValues)
         };
-        if (id) {
-            await updateForge({ ...data, id });
+        const resetId = id || forgeId;
+        if (resetId) {
+            await updateForge({ ...data, id: resetId });
         } else {
             await createForge(data);
         }
@@ -103,19 +106,17 @@ const Index = () => {
             schema: JSON.stringify(state.schema),
             initialValues: JSON.stringify(state.initialValues)
         };
-        if (id) {
-            data.id = id;
+        if (id || forgeId) {
+            data.id = id || forgeId;
         }
         const res = await saveDraft(data);
         const forge = res.data || {};
-        const { id: forgeId } = forge;
-        console.log(forgeId, 'forgeId');
-        console.log(typeof forgeId);
-        setId(forgeId);
+        setForgeId(forge.id);
+        const resetId = id || forge.id;
         message.success('保存成功');
         // 等 message 提示了之后再跳转，优化一下体验
         setTimeout(() => {
-            window.open(`/feature?id=${id || forgeId}&preview=true`);
+            window.open(`/feature?id=${resetId}&preview=true`);
         }, 100);
     };
 
@@ -126,7 +127,7 @@ const Index = () => {
     const handleFormConfig = (row?: FieldProps) => {
         const onOk = (item: FieldProps, initialValue?: string) => {
             const { schema, initialValues } = state;
-            const isNameDupList = schema.filter((it: any) => it.name === item.name);
+            const isNameDupList = schema.filter((it: any) => it.id === item.id);
             const len = row ? 2 : 1;
             if (isNameDupList.length >= len) {
                 Modal.error({
@@ -138,7 +139,7 @@ const Index = () => {
             let resetSchema = [...schema];
             if (row) {
                 resetSchema = schema.map((it: any) => {
-                    if (it.name === item.name) {
+                    if (it.id === item.id) {
                         return item;
                     }
                     return it;
@@ -173,11 +174,11 @@ const Index = () => {
             title: '温馨提示',
             content: '确定删除该组件吗？',
             onOk: () => {
-                const { name } = row;
-                const schema = state.schema.filter((item: any) => item.name !== name);
+                const { id } = row;
+                const schema = state.schema.filter((item: any) => item.id !== id);
                 setState({
                     schema,
-                    initialValues: omit(state.initialValues, [row.name])
+                    initialValues: omit(state.initialValues, [`${row.name}`])
                 });
             }
         });
@@ -214,14 +215,14 @@ const Index = () => {
                 <Space direction='vertical' size={16} style={{ width: '100%' }}>
                     <Card title='应用信息'>
                         <Form.Item label='应用名称' name='name' rules={[{ required: true, message: '请输入应用名称' }]}>
-                            <Input placeholder='请输入应用名称' />
+                            <Input placeholder='示例：命名工具' />
                         </Form.Item>
                         <Form.Item
                             label='应用描述'
                             name='description'
                             rules={[{ required: true, message: '请输入应用描述' }]}
                         >
-                            <TextArea placeholder='请输入应用描述' />
+                            <TextArea placeholder='示例：命名工具 是一个为程序员提供命名建议的工具' />
                         </Form.Item>
                         <Form.Item
                             label='icon'
@@ -236,7 +237,7 @@ const Index = () => {
                         <Form.Item label='图标'>
                             {featureIconProps.icon ? <FeatureIcon {...featureIconProps} /> : null}
                         </Form.Item>
-                        <Form.Item label='分类' name='category'>
+                        <Form.Item label='分类' name='category' rules={[{ required: true, message: '请选择分类' }]}>
                             <Select
                                 options={categoryOptions}
                                 placeholder='请选择分类'
@@ -244,20 +245,27 @@ const Index = () => {
                             />
                         </Form.Item>
                     </Card>
-                    <Card title='prompt 配置'>
+                    <Card title='指令 配置'>
                         <Form.Item
-                            label='systemPrompt'
+                            label='系统指令'
                             name='systemPrompt'
-                            rules={[{ required: true, message: '请输入 systemPrompt' }]}
+                            rules={[{ required: true, message: '请设置系统指令' }]}
                         >
-                            <TextArea placeholder='请输入 systemPrompt' autoSize={{ minRows: 2, maxRows: 6 }} />
+                            <TextArea
+                                placeholder='示例：你是一个为程序员提供文件、方法、变量等命名的助手。
+你将得到一个功能的描述信息，你需要通过描述信息，为他命名。'
+                                autoSize={{ minRows: 2, maxRows: 6 }}
+                            />
                         </Form.Item>
                         <Form.Item
-                            label='userPrompt'
+                            label='用户指令'
                             name='userPrompt'
-                            rules={[{ required: true, message: '请输入 userPrompt' }]}
+                            rules={[{ required: true, message: '请设置用户指令' }]}
                         >
-                            <TextArea placeholder='请输入 userPrompt' autoSize={{ minRows: 2, maxRows: 6 }} />
+                            <TextArea
+                                placeholder='示例：我的功能描述是：{{prompt}}。命名的约定是：{{namingStyle}}。命名的长度限制是：{{nameLength}}。'
+                                autoSize={{ minRows: 2, maxRows: 6 }}
+                            />
                         </Form.Item>
                         <Form.Item label='输入配置'>
                             {state.schema.map((item: any) => {
