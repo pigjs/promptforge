@@ -19,7 +19,7 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
     try {
         res = await fetch(url, fetchOptions);
     } catch (err) {
-        onError('网络繁忙，请稍后再试1');
+        onError('网络繁忙，请稍后再试');
         return;
     }
     if (!res.ok) {
@@ -28,7 +28,7 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
             await res.text();
         } catch (err) {
             // reason = res.statusText;
-            const msg = `网络繁忙，请稍后再试2`;
+            const msg = `网络繁忙，请稍后再试`;
             onError(msg);
             return;
         }
@@ -46,7 +46,7 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
             // ignore
         }
         if (response?.detail?.type === 'invalid_request_error') {
-            const error = `网络繁忙，请稍后再试4`;
+            const error = `网络繁忙，请稍后再试`;
 
             onError(error);
             // don't feed to the event parser
@@ -56,7 +56,7 @@ export async function fetchSSE(url: string, options: Parameters<typeof fetch>[1]
     };
 
     if (res.body?.locked) {
-        const error = `网络繁忙，请稍后再试5`;
+        const error = `网络繁忙，请稍后再试`;
         onError(error);
         return;
     }

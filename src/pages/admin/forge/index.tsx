@@ -1,11 +1,9 @@
+import ProList from '@/components/proList';
 import { statusColorEnum, statusEnum } from '@/enums/feature';
 import { approvePass, getAllList } from '@/services/forge';
-import { ProList } from '@ant-design/pro-components';
 import { message, Modal, Space, Tag } from 'antd';
 import React from 'react';
 import { useModel } from 'umi';
-
-import styles from './index.less';
 
 import type { ActionType } from '@ant-design/pro-components';
 
@@ -46,53 +44,48 @@ const Index = () => {
     };
 
     return (
-        <div className={styles.page}>
-            <ProList
-                actionRef={actionRef}
-                pagination={{}}
-                search={{}}
-                request={getData}
-                grid={{ gutter: 16, column: 3 }}
-                headerTitle='待审核应用'
-                metas={{
-                    title: {
-                        dataIndex: 'name',
-                        fieldProps: {
-                            placeholder: '请输入应用名称进行搜索'
-                        }
-                    },
-                    subTitle: {
-                        dataIndex: 'category',
-                        render: (data, row) => {
-                            return (
-                                <Space>
-                                    <Tag color={categoryColorEnum[data]}>{categoryEnum[data]}</Tag>
-                                    <Tag color={statusColorEnum[row.status]}>{statusEnum[row.status]}</Tag>
-                                </Space>
-                            );
-                        },
-                        search: false
-                    },
-                    content: {
-                        dataIndex: 'description',
-                        render: (data) => {
-                            return (
-                                <div className='ellipsis_3' style={{ minHeight: 66 }}>
-                                    {data}
-                                </div>
-                            );
-                        },
-                        search: false
-                    },
-                    actions: {
-                        cardActionProps: 'actions',
-                        render: (_data, row) => {
-                            return <div onClick={() => handleApprovePass(row.id)}>审核通过</div>;
-                        }
+        <ProList
+            actionRef={actionRef}
+            request={getData}
+            headerTitle='待审核应用'
+            metas={{
+                title: {
+                    dataIndex: 'name',
+                    fieldProps: {
+                        placeholder: '请输入应用名称进行搜索'
                     }
-                }}
-            />
-        </div>
+                },
+                subTitle: {
+                    dataIndex: 'category',
+                    render: (data, row) => {
+                        return (
+                            <Space>
+                                <Tag color={categoryColorEnum[data]}>{categoryEnum[data]}</Tag>
+                                <Tag color={statusColorEnum[row.status]}>{statusEnum[row.status]}</Tag>
+                            </Space>
+                        );
+                    },
+                    search: false
+                },
+                content: {
+                    dataIndex: 'description',
+                    render: (data) => {
+                        return (
+                            <div className='ellipsis_3' style={{ minHeight: 66 }}>
+                                {data}
+                            </div>
+                        );
+                    },
+                    search: false
+                },
+                actions: {
+                    cardActionProps: 'actions',
+                    render: (_data, row) => {
+                        return <div onClick={() => handleApprovePass(row.id)}>审核通过</div>;
+                    }
+                }
+            }}
+        />
     );
 };
 

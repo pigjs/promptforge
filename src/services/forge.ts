@@ -107,3 +107,12 @@ export function imagesGenerations(data = {}) {
         data
     });
 }
+
+/** 获取加密信息 */
+export function getCompletionsInfo(data = {}) {
+    return request({
+        url: '/api/forge/chat/completionsInfo',
+        method: 'POST',
+        data
+    });
+}

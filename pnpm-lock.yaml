@@ -17,6 +17,7 @@ specifiers:
     antd: ^5.4.3
     axios: ^1.4.0
     babel-plugin-import: ^1.13.6
+    cross-env: ^7.0.3
     dayjs: ^1.11.7
     enquire-js: ^0.2.1
     eslint: 7.32.0
@@ -71,6 +72,7 @@ devDependencies:
     '@types/react-dom': 18.2.4
     '@types/react-syntax-highlighter': 15.5.6
     babel-plugin-import: 1.13.6
+    cross-env: 7.0.3
     eslint: 7.32.0
     husky: 8.0.2
     lint-staged: 13.0.3
@@ -7139,6 +7141,17 @@ packages:
             safe-buffer: 5.2.1
             sha.js: 2.4.11
         dev: false
+
+    /cross-env/7.0.3:
+        resolution:
+            {
+                integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==
+            }
+        engines: { node: '>=10.14', npm: '>=6', yarn: '>=1' }
+        hasBin: true
+        dependencies:
+            cross-spawn: 7.0.3
+        dev: true
 
     /cross-spawn/7.0.3:
         resolution:

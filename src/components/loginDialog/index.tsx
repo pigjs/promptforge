@@ -1,8 +1,7 @@
 import { dialog } from '@/components/dialog';
 import { login, register } from '@/services/user';
 import { eventHub } from '@/utils/eventHub';
-import { setToken } from '@/utils/token';
-import { setUserInfo } from '@/utils/user';
+import { setToken, setUserInfo } from '@/utils/user';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message, Modal } from 'antd';
 import React from 'react';

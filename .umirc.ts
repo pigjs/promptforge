@@ -4,7 +4,7 @@ import config from './configs/index';
 
 export default defineConfig({
     npmClient: 'pnpm',
-    title: 'Prompt-工坊',
+    title: 'Prompt工坊',
     alias: {
         '@': resolve(__dirname, './src')
     },

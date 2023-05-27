@@ -20,12 +20,18 @@ export default () => {
         setUserInfo(userInfo);
     });
 
+    const logout = () => {
+        setUserInfo({});
+    };
+
     useMount(() => {
         eventHub.on('login', loginSuccess);
+        eventHub.on('logout', logout);
     });
 
     useUnmount(() => {
         eventHub.off('login', loginSuccess);
+        eventHub.off('logout', logout);
     });
 
     const defaultSettings = {

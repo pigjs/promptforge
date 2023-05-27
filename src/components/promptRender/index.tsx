@@ -1,17 +1,18 @@
 import { useDialog } from '@/components/dialog';
-import FieldRender from '@/components/fieldRender';
 import loginDialog from '@/components/loginDialog';
 import MessageList from '@/components/messageList';
 import { usePromptStorage } from '@/hooks/usePromptStorage';
 import { usePrompt } from '@/hooks/userPrompt';
+import { getCompletionsInfo } from '@/services/forge';
 import { performQueryStream } from '@/services/performQueryStream';
 import { eventHub } from '@/utils/eventHub';
 import { isEnterKey } from '@/utils/keyCode';
-import { getUserInfo } from '@/utils/user';
 import { isString, useEvent, useMount, useUnmount, useUrlParam } from '@pigjs/utils';
 import { Divider, Input, Spin } from 'antd';
 import React from 'react';
 import ScrollableFeed from 'react-scrollable-feed';
+import { useModel } from 'umi';
+import Sidebar from './sidebar';
 
 import styles from './index.less';
 
@@ -39,6 +40,8 @@ const promptOptions = {
 const Index = (props: PromptRenderProps) => {
     const { promptInfo, id } = props;
     const { schema, initialValues } = promptInfo;
+
+    const { mobile } = useModel('uaModel');
 
     const fieldRenderRef = React.useRef<FormInstance>(null);
     const [value, setValue] = React.useState('');
@@ -73,11 +76,11 @@ const Index = (props: PromptRenderProps) => {
     });
 
     useMount(() => {
-        const userInfo = getUserInfo();
-        // 已经登录的，取消页面拦截
-        if (userInfo.userId) {
-            cancelUnblock();
-        }
+        // const userInfo = getUserInfo();
+        // // 已经登录的，取消页面拦截
+        // if (userInfo.userId) {
+        //     cancelUnblock();
+        // }
     });
 
     const onChange = (e: any) => {
@@ -96,9 +99,11 @@ const Index = (props: PromptRenderProps) => {
                 }
             ]);
             setLoading(true);
+            const res = await getCompletionsInfo({ id, userPromptOptions: values });
+            const { data } = res;
             const { response } = await performQueryStream({
-                id,
                 userPromptOptions: values,
+                content: data,
                 onProgress: (content) => {
                     setStreamMessage((state) => {
                         const prevContent = state?.content || '';
@@ -158,14 +163,9 @@ const Index = (props: PromptRenderProps) => {
 
     return (
         <div className={styles.promptRender}>
-            <div className={styles.promptRender_left}>
+            {/* <div className={styles.promptRender_left}>
                 <div className={styles.promptRender_left_title}>{promptInfo.name}</div>
                 <div className={styles.promptRender_left_description}>
-                    {/* {promptInfo.description?.length > 80 ? (
-                        <Tooltip title={promptInfo.description}>{promptInfo.description.slice(0, 80)}...</Tooltip>
-                    ) : (
-                        promptInfo.description
-                    )} */}
                     {promptInfo.description}
                 </div>
                 <Divider />
@@ -178,8 +178,9 @@ const Index = (props: PromptRenderProps) => {
                         wrapperCol={{ span: 24 }}
                     />
                 ) : null}
-            </div>
-            <Divider type='vertical' />
+            </div> */}
+            <Sidebar schema={schema} initialValues={initialValues} promptInfo={promptInfo} ref={fieldRenderRef} />
+            {!mobile && <Divider type='vertical' />}
             <div className={styles.promptRender_right}>
                 <div className={styles.promptRender_right_messageList}>
                     <Spin spinning={loading}>

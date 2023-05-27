@@ -1,5 +1,6 @@
 import loginDialog from '@/components/loginDialog';
-import { clearToken, getToken } from '@/utils/token';
+import { eventHub } from '@/utils/eventHub';
+import { clearToken, getToken } from '@/utils/user';
 import { setConfig, setMessage } from '@pigjs/request';
 import { message, Modal } from 'antd';
 import axios from 'axios';
@@ -15,11 +16,15 @@ setConfig({
     errorCode: {
         // 错误状态
         401: () => {
-            clearToken();
-            clearUserInfo();
             // 未登录
             if (!loginInstance) {
-                loginDialog().show({ onOk: () => setTimeout(() => location.reload(), 300) });
+                clearToken();
+                clearUserInfo();
+                eventHub.emit('logout');
+                const reload = () => {
+                    setTimeout(() => location.reload(), 300);
+                };
+                loginDialog().show({ onOk: reload });
                 loginInstance = true;
             }
         }

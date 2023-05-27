@@ -1,12 +1,10 @@
+import ProList from '@/components/proList';
 import { statusColorEnum, statusEnum } from '@/enums/feature';
 import { useLogin } from '@/hooks/useLogin';
 import { getUserForgeList } from '@/services/forge';
-import { ProList } from '@ant-design/pro-components';
 import { Button, Space, Tag } from 'antd';
 import React from 'react';
 import { history, useModel } from 'umi';
-
-import styles from './index.less';
 
 const Index = () => {
     const { initialState } = useModel('@@initialState');
@@ -36,66 +34,61 @@ const Index = () => {
     );
 
     return (
-        <div className={styles.page}>
-            <ProList
-                pagination={{}}
-                search={{}}
-                request={getData}
-                grid={{ gutter: 16, column: 3 }}
-                toolBarRender={() => [
-                    <Button type='primary' key='primary' onClick={openCreatePage}>
-                        创建应用
-                    </Button>
-                ]}
-                metas={{
-                    title: {
-                        dataIndex: 'name',
-                        fieldProps: {
-                            placeholder: '请输入应用名称进行搜索'
-                        }
-                    },
-                    subTitle: {
-                        dataIndex: 'category',
-                        render: (data, row) => {
-                            return (
-                                <Space>
-                                    <Tag color={categoryColorEnum[data]}>{categoryEnum[data]}</Tag>
-                                    <Tag color={statusColorEnum[row.status]}>{statusEnum[row.status]}</Tag>
-                                </Space>
-                            );
-                        },
-                        search: false
-                    },
-                    content: {
-                        dataIndex: 'description',
-                        render: (data) => {
-                            return (
-                                <div className='ellipsis_3' style={{ minHeight: 66 }}>
-                                    {data}
-                                </div>
-                            );
-                        },
-                        search: false
-                    },
-                    actions: {
-                        cardActionProps: 'actions',
-                        render: (_data, row) => {
-                            const status = row.status as unknown as string;
-                            if (['1'].includes(status)) {
-                                return <div style={{ color: '#333' }}>{row.count}次使用</div>;
-                            }
-                            if (['2', '3'].includes(status)) {
-                                return <div onClick={() => history.push(`/forge/create?id=${row.id}`)}>编辑</div>;
-                            }
-                            if (['4'].includes(status)) {
-                                return <div style={{ color: '#333' }}>系统审核中，请耐心等待！</div>;
-                            }
-                            return null;
-                        }
+        <ProList
+            request={getData}
+            toolBarRender={() => [
+                <Button type='primary' key='primary' onClick={openCreatePage}>
+                    创建应用
+                </Button>
+            ]}
+            metas={{
+                title: {
+                    dataIndex: 'name',
+                    fieldProps: {
+                        placeholder: '请输入应用名称进行搜索'
                     }
-                }}
-            />
-        </div>
+                },
+                subTitle: {
+                    dataIndex: 'category',
+                    render: (data, row) => {
+                        return (
+                            <Space>
+                                <Tag color={categoryColorEnum[data]}>{categoryEnum[data]}</Tag>
+                                <Tag color={statusColorEnum[row.status]}>{statusEnum[row.status]}</Tag>
+                            </Space>
+                        );
+                    },
+                    search: false
+                },
+                content: {
+                    dataIndex: 'description',
+                    render: (data) => {
+                        return (
+                            <div className='ellipsis_3' style={{ minHeight: 66 }}>
+                                {data}
+                            </div>
+                        );
+                    },
+                    search: false
+                },
+                actions: {
+                    cardActionProps: 'actions',
+                    render: (_data, row) => {
+                        const status = row.status as unknown as string;
+                        if (['1'].includes(status)) {
+                            return <div style={{ color: '#333' }}>{row.count}次使用</div>;
+                        }
+                        if (['2', '3'].includes(status)) {
+                            return <div onClick={() => history.push(`/forge/create?id=${row.id}`)}>编辑</div>;
+                        }
+                        if (['4'].includes(status)) {
+                            return <div style={{ color: '#333' }}>系统审核中，请耐心等待！</div>;
+                        }
+                        return null;
+                    }
+                }
+            }}
+        />
     );
 };
 

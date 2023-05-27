@@ -1,4 +1,3 @@
-// import { getOpenAIApiKey, getOpenAIModel } from '@/utils/index';
 import { message } from 'antd';
 import { ChatGPTApi } from './chatgpt-browser';
 
@@ -8,7 +7,7 @@ type PerformQueryOptionsType = {
     /** 重试次数 默认 3 */
     maxAttempts?: number;
     /** 应用id */
-    id: string;
+    content: string;
     /** userPrompt 配置 */
     userPromptOptions: Record<string, any>;
     // /** 系统 Prompt */
@@ -22,30 +21,13 @@ type PerformQueryOptionsType = {
 
 // @ts-ignore
 export async function performQueryStream(options: PerformQueryOptionsType) {
-    const { maxAttempts = 3, onProgress, id, userPromptOptions } = options;
-    // const key = getOpenAIApiKey();
-    // const model = getOpenAIModel();
-    const openai = new ChatGPTApi({ apiUrl: '/api/forge/chat/completions' });
+    const { maxAttempts = 3, onProgress, content, userPromptOptions } = options;
+    const openai = new ChatGPTApi({ apiUrl: 'https://promptforge.uk/v1/chat/completions' });
 
     for (let i = 0; i < maxAttempts; i++) {
         try {
             const completion = await openai.createChatCompletion({
-                // model,
-                // messages: [
-                //     {
-                //         role: 'system',
-                //         content: systemPrompt
-                //     },
-                //     ...messages,
-                //     {
-                //         role: 'user',
-                //         content: userPrompt
-                //     }
-                // ],
-                // max_tokens: 500,
-                // temperature: 0,
-                id,
-                userPromptOptions,
+                content,
                 onProgress: (result: CreateChatCompletionResponse) => {
                     const content = result.data.choices[0].message?.content as string;
                     onProgress?.(content);
