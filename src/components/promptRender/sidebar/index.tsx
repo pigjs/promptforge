@@ -13,7 +13,7 @@ const Index = (props, ref) => {
 
     React.useImperativeHandle(ref, () => ({ ...fieldRenderRef.current }));
 
-    const { schema, initialValues, promptInfo } = props;
+    const { ref1, ref2, schema, initialValues, promptInfo } = props;
     const [open, setOpen] = React.useState(false);
 
     const { mobile } = useModel('uaModel');
@@ -28,7 +28,7 @@ const Index = (props, ref) => {
                     <Drawer title={promptInfo.name} placement='left' closable={false} onClose={onClose} open={open}>
                         {child}
                     </Drawer>
-                    <FloatButton icon={<SettingOutlined />} shape='circle' onClick={() => setOpen(true)} />
+                    <FloatButton ref={ref1} icon={<SettingOutlined />} shape='circle' onClick={() => setOpen(true)} />
                 </div>
             );
         }
@@ -36,19 +36,23 @@ const Index = (props, ref) => {
     };
 
     return layout(
-        <div className={styles.sidebar}>
+        <div className={`${styles.sidebar} ${mobile ? styles.mobile : ''}`}>
             {!mobile ? <div className={styles.sidebar_title}>{promptInfo.name}</div> : null}
-            <div className={styles.sidebar_description}>{promptInfo.description}</div>
+            <div ref={!mobile ? ref1 : null} className={styles.sidebar_description}>
+                {promptInfo.description}
+            </div>
             <Divider />
-            {schema ? (
-                <FieldRender
-                    ref={fieldRenderRef}
-                    layout='vertical'
-                    schema={schema}
-                    initialValues={initialValues}
-                    wrapperCol={{ span: 24 }}
-                />
-            ) : null}
+            <div ref={!mobile ? ref2 : null}>
+                {schema ? (
+                    <FieldRender
+                        ref={fieldRenderRef}
+                        layout='vertical'
+                        schema={schema}
+                        initialValues={initialValues}
+                        wrapperCol={{ span: 24 }}
+                    />
+                ) : null}
+            </div>
         </div>
     );
 };

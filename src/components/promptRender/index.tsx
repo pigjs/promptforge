@@ -7,8 +7,9 @@ import { getCompletionsInfo } from '@/services/forge';
 import { performQueryStream } from '@/services/performQueryStream';
 import { eventHub } from '@/utils/eventHub';
 import { isEnterKey } from '@/utils/keyCode';
+import { getTour, setTour } from '@/utils/user';
 import { isString, useEvent, useMount, useUnmount, useUrlParam } from '@pigjs/utils';
-import { Divider, Input, Spin } from 'antd';
+import { Divider, Input, Tour } from 'antd';
 import React from 'react';
 import ScrollableFeed from 'react-scrollable-feed';
 import { useModel } from 'umi';
@@ -19,7 +20,7 @@ import styles from './index.less';
 import type { FieldProps } from '@/components/field';
 import type { MessageType } from '@/components/messageList';
 import type { BaseForge } from '@/services/types/forge';
-import type { FormInstance } from 'antd';
+import type { FormInstance, TourProps } from 'antd';
 
 const { TextArea } = Input;
 
@@ -46,6 +47,11 @@ const Index = (props: PromptRenderProps) => {
     const fieldRenderRef = React.useRef<FormInstance>(null);
     const [value, setValue] = React.useState('');
     const [loading, setLoading] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+
+    const ref1 = React.useRef();
+    const ref2 = React.useRef();
+    const ref3 = React.useRef();
 
     const [streamMessage, setStreamMessage] = React.useState<MessageType>();
     const [stream, setStream] = React.useState(false);
@@ -76,12 +82,52 @@ const Index = (props: PromptRenderProps) => {
     });
 
     useMount(() => {
+        if (!getTour()) {
+            setTimeout(() => {
+                setOpen(true);
+            }, 1000);
+        }
         // const userInfo = getUserInfo();
         // // 已经登录的，取消页面拦截
         // if (userInfo.userId) {
         //     cancelUnblock();
         // }
     });
+
+    const baseSteps: TourProps['steps'] = mobile
+        ? [
+              {
+                  title: '应用设置',
+                  description: '点击这里，这里可以查看应用说明，及使用示例，同时可以根据自己的需要，选择不同的配置项',
+                  target: () => ref1.current
+              }
+          ]
+        : [
+              {
+                  title: '应用描述',
+                  description: '这里可以查看应用说明，及使用示例',
+                  target: () => ref1.current
+              },
+              {
+                  title: '应用设置',
+                  description: '可以根据自己的需要，选择不同的配置项',
+                  target: () => ref2.current
+              }
+          ];
+
+    const steps: TourProps['steps'] = [
+        ...baseSteps,
+        {
+            title: '发送消息',
+            description: '输入内容，按回车键发送',
+            target: () => ref3.current
+        }
+    ];
+
+    const closeTour = () => {
+        setOpen(false);
+        setTour(true);
+    };
 
     const onChange = (e: any) => {
         const val = e.target.value;
@@ -99,6 +145,11 @@ const Index = (props: PromptRenderProps) => {
                 }
             ]);
             setLoading(true);
+            setStreamMessage({
+                role: 'assistant',
+                content: ''
+            });
+            setStream(true);
             const res = await getCompletionsInfo({ id, userPromptOptions: values });
             const { data } = res;
             const { response } = await performQueryStream({
@@ -158,7 +209,8 @@ const Index = (props: PromptRenderProps) => {
     const messageListProps = {
         messageList,
         stream,
-        streamMessage
+        streamMessage,
+        loading
     };
 
     return (
@@ -179,18 +231,27 @@ const Index = (props: PromptRenderProps) => {
                     />
                 ) : null}
             </div> */}
-            <Sidebar schema={schema} initialValues={initialValues} promptInfo={promptInfo} ref={fieldRenderRef} />
+            <Sidebar
+                ref1={ref1}
+                ref2={ref2}
+                schema={schema}
+                initialValues={initialValues}
+                promptInfo={promptInfo}
+                ref={fieldRenderRef}
+            />
             {!mobile && <Divider type='vertical' />}
             <div className={styles.promptRender_right}>
                 <div className={styles.promptRender_right_messageList}>
-                    <Spin spinning={loading}>
+                    {/* <Spin spinning={loading}> */}
+                    <div style={{ height: '100%' }}>
                         <ScrollableFeed>
                             <MessageList {...messageListProps} />
                         </ScrollableFeed>
-                    </Spin>
+                    </div>
+                    {/* </Spin> */}
                 </div>
 
-                <div className={styles.promptRender_right_send}>
+                <div className={styles.promptRender_right_send} ref={ref3}>
                     <TextArea
                         onKeyDown={onPressEnter}
                         autoSize={{ minRows: 1, maxRows: 2 }}
@@ -202,6 +263,7 @@ const Index = (props: PromptRenderProps) => {
                     />
                 </div>
             </div>
+            <Tour open={open} onClose={closeTour} steps={steps} />
         </div>
     );
 };

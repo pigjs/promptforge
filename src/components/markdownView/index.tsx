@@ -6,7 +6,7 @@ import CopyToClipboard from './copyToClipboard';
 
 import styles from './index.less';
 
-const Index = ({ source }: { source: string }) => {
+const Index = ({ source, loading }: { source: string }) => {
     const components = {
         // @ts-ignore
         code({ node, inline, className, children, ...props }) {
@@ -33,8 +33,13 @@ const Index = ({ source }: { source: string }) => {
             );
         }
     };
+    // const loading = true;
     // @ts-ignore
-    return <ReactMarkdown components={components}>{source}</ReactMarkdown>;
+    return (
+        <ReactMarkdown className={`${loading ? styles.chatContent : ''}`} components={components}>
+            {source}
+        </ReactMarkdown>
+    );
 };
 
 export default React.memo(Index);

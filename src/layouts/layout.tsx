@@ -57,8 +57,8 @@ export default () => {
         <div id='test-pro-layout'>
             {/* @ts-ignore */}
             <ProLayout
-                logo='/logo.png'
-                title='Prompt-工坊'
+                logo='/logo.jpg'
+                title='Prompt工坊'
                 token={{
                     pageContainer: {
                         colorBgPageContainer: '#444654'

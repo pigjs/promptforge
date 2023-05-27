@@ -14,3 +14,24 @@
         border-top-right-radius: 8px;
     }
 }
+
+.chatContent {
+    &::after {
+        margin-left: 0.25rem;
+        vertical-align: baseline;
+        -webkit-animation: blink 1s steps(5, start) infinite;
+        animation: blink 1s steps(5, start) infinite;
+        content: '▋';
+    }
+}
+@-webkit-keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}
+
+@keyframes blink {
+    to {
+        visibility: hidden;
+    }
+}

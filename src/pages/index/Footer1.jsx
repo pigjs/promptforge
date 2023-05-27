@@ -1,9 +1,10 @@
+import { isImageUrl } from '@/utils/image';
 import { Col, Row } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 import OverPack from 'rc-scroll-anim/lib/ScrollOverPack';
 import TweenOne from 'rc-tween-one';
 import React from 'react';
-import { getChildrenToRender, isImg } from './utils';
+import { getChildrenToRender } from './utils';
 
 class Footer extends React.Component {
     static defaultProps = {
@@ -16,7 +17,7 @@ class Footer extends React.Component {
             return (
                 <Col key={i.toString()} {...itemProps} title={null} content={null}>
                     <h2 {...title}>
-                        {typeof title.children === 'string' && title.children.match(isImg) ? (
+                        {typeof title.children === 'string' && isImageUrl(title.children) ? (
                             <img src={title.children} width='100%' alt='img' />
                         ) : (
                             title.children

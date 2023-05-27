@@ -8,8 +8,8 @@ export const Nav00DataSource = {
         className: 'header0-logo',
         children: (
             <div style={{ display: 'flex', alignItems: 'center', height: 56 }}>
-                <img src='/logo.png' style={{ width: 28, height: 28 }} />
-                <h1 style={{ fontSize: 18, color: '#fff', fontWeight: 600, marginLeft: 8 }}>Prompt-工坊</h1>
+                <img src='/logo.jpg' style={{ width: 28, height: 28 }} />
+                <h1 style={{ fontSize: 18, color: '#fff', fontWeight: 600, marginLeft: 8 }}>Prompt工坊</h1>
             </div>
         )
     },
@@ -24,7 +24,8 @@ export const Banner01DataSource = {
     textWrapper: { className: 'banner0-text-wrapper' },
     title: {
         className: 'banner0-title',
-        children: 'https://zos.alipayobjects.com/rmsportal/HqnZZjBjWRbjyMr.png'
+        // children: 'https://zos.alipayobjects.com/rmsportal/HqnZZjBjWRbjyMr.png'
+        children: 'brand.png'
     },
     content: {
         className: 'banner0-content',
@@ -399,7 +400,7 @@ export const Footer10DataSource = {
                     children: [
                         {
                             name: 'content0',
-                            children: 'Animation specification and components of Ant Design.'
+                            children: '专注于快速创建AI应用，帮助您实现智能化创新，探索无限可能.'
                         }
                     ]
                 }
@@ -412,10 +413,24 @@ export const Footer10DataSource = {
                 title: { children: '产品' },
                 childWrapper: {
                     children: [
-                        { name: 'link0', href: '#', children: '产品更新记录' },
-                        { name: 'link1', href: '#', children: 'API文档' },
-                        { name: 'link2', href: '#', children: '快速入门' },
-                        { name: 'link3', href: '#', children: '参考指南' }
+                        {
+                            name: 'link0',
+                            href: 'https://cipa7o1s0xx.feishu.cn/wiki/MH8FwuhjeidlK6kSHNSc5SManrc',
+                            children: '产品更新记录',
+                            target: '_blank'
+                        },
+                        {
+                            name: 'link2',
+                            href: 'https://cipa7o1s0xx.feishu.cn/wiki/PVB6wyGc1iMpbwkWORscApnYnog',
+                            children: '快速入门',
+                            target: '_blank'
+                        },
+                        {
+                            name: 'link3',
+                            href: 'https://cipa7o1s0xx.feishu.cn/wiki/ZGdwwJw4vi0bIEk9Irlclq3Vnac',
+                            children: '如何创建应用',
+                            target: '_blank'
+                        }
                     ]
                 }
             },
@@ -424,27 +439,24 @@ export const Footer10DataSource = {
                 xs: 24,
                 md: 6,
                 className: 'block',
-                title: { children: '关于' },
+                title: { children: '联系我们' },
                 childWrapper: {
-                    children: [
-                        { href: '#', name: 'link0', children: 'FAQ' },
-                        { href: '#', name: 'link1', children: '联系我们' }
-                    ]
-                }
-            },
-            {
-                name: 'block3',
-                xs: 24,
-                md: 6,
-                className: 'block',
-                title: { children: '资源' },
-                childWrapper: {
-                    children: [
-                        { href: '#', name: 'link0', children: 'Ant Design' },
-                        { href: '#', name: 'link1', children: 'Ant Motion' }
-                    ]
+                    children: [{ name: 'link1', children: 'qrcode_gzh.jpg', style: { width: 120, height: 120 } }]
                 }
             }
+            // {
+            //     name: 'block3',
+            //     xs: 24,
+            //     md: 6,
+            //     className: 'block',
+            //     title: { children: '资源' },
+            //     childWrapper: {
+            //         children: [
+            //             { href: '#', name: 'link0', children: 'Ant Design' },
+            //             { href: '#', name: 'link1', children: 'Ant Motion' }
+            //         ]
+            //     }
+            // }
         ]
     },
     copyrightWrapper: { className: 'copyright-wrapper' },
@@ -452,8 +464,14 @@ export const Footer10DataSource = {
     copyright: {
         className: 'copyright',
         children: (
-            <span>
-                ©2018 by <a href='https://motion.ant.design'>Ant Motion</a> All Rights Reserved
+            // <span>
+            //     ©2018 by <a href='https://motion.ant.design'>Ant Motion</a> All Rights Reserved
+            // </span>
+            <span style={{ fontSize: 14 }}>
+                ICP备案号:
+                <a style={{ marginLeft: 8 }} href='https://beian.miit.gov.cn' target='_blank' rel='noreferrer'>
+                    浙ICP备2023003473号-2
+                </a>
             </span>
         )
     }

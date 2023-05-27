@@ -45,3 +45,13 @@ export function setToken(token: string) {
 export function clearToken() {
     localStorage.removeItem('Authorization');
 }
+
+/** 获取看过新手指引状态 */
+export function getTour() {
+    const tour = localStorage.getItem('readTour');
+    return tour === 'true';
+}
+/** 设置新手指引状态 */
+export function setTour(data: string) {
+    localStorage.setItem('readTour', data);
+}

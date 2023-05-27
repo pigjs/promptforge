@@ -1,7 +1,7 @@
 {
     "name": "promptforge",
     "version": "1.0.0",
-    "description": "Prompt-工坊 是一款基于openAI，通过 prompt 提示制作工具的平台",
+    "description": "Prompt工坊 是一款基于openAI，通过 prompt 提示制作工具的平台",
     "keywords": [],
     "license": "ISC",
     "author": "MrYeZiqing",

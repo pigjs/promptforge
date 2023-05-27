@@ -18,7 +18,7 @@ export interface MessageListProps {
 }
 
 const RenderItem = (props: { item: MessageType; index: number }) => {
-    const { item, index } = props;
+    const { item, index, loading } = props;
     return (
         <Fragment key={index}>
             {item.role === 'user' ? (
@@ -39,7 +39,7 @@ const RenderItem = (props: { item: MessageType; index: number }) => {
                                 <span style={{ color: '#ef4146' }}>{item.error}</span>
                             ) : (
                                 <span style={{ color: '#fff', display: 'inline-block' }}>
-                                    <MarkdownView source={item.content!} />
+                                    <MarkdownView loading={loading} source={item.content!} />
                                 </span>
                                 // @ts-ignore
                             )
@@ -53,7 +53,7 @@ const RenderItem = (props: { item: MessageType; index: number }) => {
 };
 
 const Index = (props: MessageListProps) => {
-    const { messageList = [], stream, streamMessage } = props;
+    const { messageList = [], stream, streamMessage, loading } = props;
 
     return (
         <div className={styles.messageList}>
@@ -72,7 +72,7 @@ const Index = (props: MessageListProps) => {
                     dataSource={[streamMessage]}
                     itemLayout='horizontal'
                     locale={{ emptyText: <span style={{ color: '#fff' }}>暂无消息</span> }}
-                    renderItem={(item, index) => <RenderItem item={item} index={index} />}
+                    renderItem={(item, index) => <RenderItem loading={loading} item={item} index={index} />}
                 />
             )}
         </div>
