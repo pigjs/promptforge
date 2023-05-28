@@ -67,6 +67,8 @@
             }
         }
         &_send {
+            display: flex;
+            align-items: center;
             padding: 0 7vw;
             overflow-y: auto;
             :global {
@@ -84,6 +86,23 @@
                     &::placeholder {
                         color: #8e8e9f;
                     }
+                }
+            }
+            &_icon {
+                transform: rotate(320deg);
+                font-size: 18px;
+                opacity: 0.4;
+            }
+            &_iconBox {
+                margin-left: 4px;
+                height: 41px;
+                padding: 0 10px;
+                line-height: 38px;
+                border-radius: 8px;
+                cursor: pointer;
+                &:hover {
+                    background-color: #343541;
+                    color: #fff;
                 }
             }
         }

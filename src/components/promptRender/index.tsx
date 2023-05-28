@@ -8,6 +8,7 @@ import { performQueryStream } from '@/services/performQueryStream';
 import { eventHub } from '@/utils/eventHub';
 import { isEnterKey } from '@/utils/keyCode';
 import { getTour, setTour } from '@/utils/user';
+import SendOutlined from '@ant-design/icons/SendOutlined';
 import { isString, useEvent, useMount, useUnmount, useUrlParam } from '@pigjs/utils';
 import { Divider, Input, Tour } from 'antd';
 import React from 'react';
@@ -119,7 +120,7 @@ const Index = (props: PromptRenderProps) => {
         ...baseSteps,
         {
             title: '发送消息',
-            description: '输入内容，按回车键发送',
+            description: '输入内容，按回车键发送或点击发送图标，即可发送消息',
             target: () => ref3.current
         }
     ];
@@ -198,7 +199,7 @@ const Index = (props: PromptRenderProps) => {
         if (!value?.trim()) {
             return;
         }
-        if (!isEnterKey(event)) {
+        if (event && !isEnterKey(event)) {
             return;
         }
         const values = await fieldRenderRef.current?.validateFields();
@@ -261,6 +262,9 @@ const Index = (props: PromptRenderProps) => {
                         value={value}
                         onChange={onChange}
                     />
+                    <div className={styles.promptRender_right_send_iconBox} onClick={() => onPressEnter()}>
+                        <SendOutlined className={styles.promptRender_right_send_icon} />
+                    </div>
                 </div>
             </div>
             <Tour open={open} onClose={closeTour} steps={steps} />
