@@ -195,14 +195,19 @@ const Index = (props: PromptRenderProps) => {
         }
     };
 
-    const onPressEnter = async (event: any) => {
+    const onPressEnter = async (event?: any) => {
         if (!value?.trim()) {
             return;
         }
         if (event && !isEnterKey(event)) {
             return;
         }
-        const values = await fieldRenderRef.current?.validateFields();
+        let values: any = {};
+        if (fieldRenderRef.current?.validateFields) {
+            values = await fieldRenderRef.current.validateFields();
+        } else {
+            values = initialValues;
+        }
         onSend?.({ ...values, prompt: value });
         setValue('');
     };
@@ -262,7 +267,14 @@ const Index = (props: PromptRenderProps) => {
                         value={value}
                         onChange={onChange}
                     />
-                    <div className={styles.promptRender_right_send_iconBox} onClick={() => onPressEnter()}>
+                    <div
+                        className={`${
+                            mobile
+                                ? styles.promptRender_right_send_icon_mobile
+                                : styles.promptRender_right_send_icon_web
+                        }`}
+                        onClick={() => onPressEnter()}
+                    >
                         <SendOutlined className={styles.promptRender_right_send_icon} />
                     </div>
                 </div>
