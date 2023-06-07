@@ -3,9 +3,31 @@ import { eventHub } from '@/utils/eventHub';
 import { getUserInfo } from '@/utils/user';
 import { ProLayout } from '@ant-design/pro-components';
 import { useEvent, useMount, useUnmount } from '@pigjs/utils';
+import { Dropdown } from 'antd';
 import React from 'react';
 import { history, Link, Outlet, useLocation } from 'umi';
 import Avatar from './avatar';
+
+import type { MenuProps } from 'antd';
+
+const adminItems: MenuProps['items'] = [
+    {
+        key: '1',
+        label: (
+            <Link to='/admin/forge' key='adminForge'>
+                应用管理
+            </Link>
+        )
+    },
+    {
+        key: '2',
+        label: (
+            <Link to='/admin/secretkey' key='adminSecretkey'>
+                密钥管理
+            </Link>
+        )
+    }
+];
 
 export default () => {
     const location = useLocation();
@@ -103,9 +125,9 @@ export default () => {
                         我的应用
                     </a>,
                     userInfo.username === '18268937872' ? (
-                        <Link to='/admin/forge' key='adminForge'>
-                            应用管理
-                        </Link>
+                        <Dropdown menu={{ items: adminItems }}>
+                            <a key='admin'>系统管理</a>
+                        </Dropdown>
                     ) : null
                 ]}
                 onMenuHeaderClick={() => history.push('/')}

@@ -7,7 +7,7 @@ import { getCompletionsInfo } from '@/services/forge';
 import { performQueryStream } from '@/services/performQueryStream';
 import { eventHub } from '@/utils/eventHub';
 import { isEnterKey } from '@/utils/keyCode';
-import { getTour, setTour } from '@/utils/user';
+import { getTour, getUserInfo, setTour } from '@/utils/user';
 import SendOutlined from '@ant-design/icons/SendOutlined';
 import { isString, useEvent, useMount, useUnmount, useUrlParam } from '@pigjs/utils';
 import { Divider, Input, Tour } from 'antd';
@@ -88,11 +88,11 @@ const Index = (props: PromptRenderProps) => {
                 setOpen(true);
             }, 1000);
         }
-        // const userInfo = getUserInfo();
-        // // 已经登录的，取消页面拦截
-        // if (userInfo.userId) {
-        //     cancelUnblock();
-        // }
+        const userInfo = getUserInfo();
+        // 已经登录的，取消页面拦截
+        if (userInfo.userId) {
+            cancelUnblock();
+        }
     });
 
     const baseSteps: TourProps['steps'] = mobile

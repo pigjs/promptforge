@@ -393,7 +393,8 @@ export const Footer10DataSource = {
                 className: 'block',
                 title: {
                     className: 'logo',
-                    children: 'https://zos.alipayobjects.com/rmsportal/qqaimmXZVSwAhpL.svg'
+                    // children: 'https://zos.alipayobjects.com/rmsportal/qqaimmXZVSwAhpL.svg'
+                    children: 'brand.png'
                 },
                 childWrapper: {
                     className: 'slogan',

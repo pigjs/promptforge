@@ -14,11 +14,9 @@ export async function getInitialState() {
         // @ts-ignore
         categoryColorEnum[item.id] = colorEnum[count];
     });
-
-    const categoryOptions = data;
     return {
         categoryEnum,
-        categoryOptions,
+        categoryOptions: data,
         categoryColorEnum
     };
 }

@@ -75,6 +75,13 @@ const Index = () => {
     const submit = async () => {
         const values = await form.validateFields();
         const { systemPrompt, userPrompt, ...resetValues } = values;
+        if (userPrompt.indexOf('{{prompt}}') === -1) {
+            Modal.warning({
+                title: '温馨提示',
+                content: '用户指令里面一定要包含 {{prompt}}，这个是用户输入的内容'
+            });
+            return;
+        }
         const data = {
             ...resetValues,
             prompt: JSON.stringify({
@@ -97,6 +104,13 @@ const Index = () => {
     const preview = async () => {
         const values = await form.validateFields();
         const { systemPrompt, userPrompt, ...resetValues } = values;
+        if (userPrompt.indexOf('{{prompt}}') === -1) {
+            Modal.warning({
+                title: '温馨提示',
+                content: '用户指令里面一定要包含 {{prompt}}，这个是用户输入的内容'
+            });
+            return;
+        }
         const data = {
             ...resetValues,
             prompt: JSON.stringify({
@@ -263,7 +277,7 @@ const Index = () => {
                             rules={[{ required: true, message: '请设置用户指令' }]}
                         >
                             <TextArea
-                                placeholder='示例：我的功能描述是：{{prompt}}。命名的约定是：{{namingStyle}}。命名的长度限制是：{{nameLength}}。'
+                                placeholder='示例：我的功能描述是：{{prompt}}。命名的约定是：{{namingStyle}}。命名的长度限制是：{{nameLength}}。注意 {{prompt}}是一定要有的，这个是用户的输入的内容'
                                 autoSize={{ minRows: 2, maxRows: 6 }}
                             />
                         </Form.Item>

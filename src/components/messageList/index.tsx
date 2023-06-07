@@ -25,7 +25,11 @@ const RenderItem = (props: { item: MessageType; index: number }) => {
                 <List.Item>
                     <List.Item.Meta
                         avatar={<Avatar style={{ backgroundColor: '#19c37d' }}>BA</Avatar>}
-                        title={<span style={{ color: '#fff' }}>{item.content}</span>}
+                        title={
+                            <span style={{ color: '#fff', wordWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+                                {item.content}
+                            </span>
+                        }
                         className={styles.messageList_userItem}
                     />
                 </List.Item>
@@ -38,7 +42,13 @@ const RenderItem = (props: { item: MessageType; index: number }) => {
                             item.error ? (
                                 <span style={{ color: '#ef4146' }}>{item.error}</span>
                             ) : (
-                                <span style={{ color: '#fff', display: 'inline-block' }}>
+                                <span
+                                    style={{
+                                        color: '#fff',
+                                        wordWrap: 'break-word',
+                                        display: 'inline-block'
+                                    }}
+                                >
                                     <MarkdownView loading={loading} source={item.content!} />
                                 </span>
                                 // @ts-ignore
