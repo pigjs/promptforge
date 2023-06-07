@@ -43,17 +43,17 @@ const Index = () => {
             <Row gutter={[16, 16]}>
                 <Col span={span}>
                     <Card>
-                        <Statistic title='总额度' value={data.total_granted} loading={loading} />
+                        <Statistic title='总额度（USD）' value={data.total_granted} loading={loading} />
                     </Card>
                 </Col>
                 <Col span={span}>
                     <Card>
-                        <Statistic title='已使用额度' value={data.total_used} precision={2} loading={loading} />
+                        <Statistic title='已使用额度（USD）' value={data.total_used} precision={2} loading={loading} />
                     </Card>
                 </Col>
                 <Col span={span}>
                     <Card>
-                        <Statistic title='剩余可用额度' value={data.total_available} loading={loading} />
+                        <Statistic title='剩余可用额度（USD）' value={data.total_available} loading={loading} />
                     </Card>
                 </Col>
             </Row>
