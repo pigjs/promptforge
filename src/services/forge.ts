@@ -142,3 +142,13 @@ export function updateSecretkey(data = {}) {
         data
     });
 }
+
+/** openai apiKey 余额 */
+export function getBilling(apiKey: string) {
+    return request({
+        url: 'https://promptforge.uk/v1/dashboard/billing',
+        params: {
+            apiKey
+        }
+    });
+}

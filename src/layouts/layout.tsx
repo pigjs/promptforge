@@ -28,6 +28,24 @@ const adminItems: MenuProps['items'] = [
         )
     }
 ];
+const forgeItems: MenuProps['items'] = [
+    {
+        key: '1',
+        label: (
+            <Link to='/forge' key='forge'>
+                应用中心
+            </Link>
+        )
+    },
+    {
+        key: '2',
+        label: (
+            <Link to='/feature/billing' key='featureBilling'>
+                OpenAI 余额查询
+            </Link>
+        )
+    }
+];
 
 export default () => {
     const location = useLocation();
@@ -118,15 +136,15 @@ export default () => {
                     }
                 }}
                 actionsRender={() => [
-                    <Link to='/forge' key='forge'>
-                        工作台
-                    </Link>,
+                    <Dropdown key='forge' menu={{ items: forgeItems }}>
+                        <a key='forge'>工作台</a>
+                    </Dropdown>,
                     <a onClick={openMyWorkshopPage} key='myWorkshop'>
                         我的应用
                     </a>,
                     userInfo.username === '18268937872' ? (
-                        <Dropdown menu={{ items: adminItems }}>
-                            <a key='admin'>系统管理</a>
+                        <Dropdown key='admin' menu={{ items: adminItems }}>
+                            <a>系统管理</a>
                         </Dropdown>
                     ) : null
                 ]}
