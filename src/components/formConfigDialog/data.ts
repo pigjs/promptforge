@@ -1,4 +1,4 @@
-import type { SchemaProps } from '@/components/fieldRender';
+import type { FieldProps } from '@/components/field';
 
 /** 选择组件 */
 export const selectComp = [
@@ -10,7 +10,7 @@ export const selectComp = [
     { label: '复选框', value: 'Checkbox' }
 ];
 
-export const basePropsConfig: SchemaProps[] = [
+export const basePropsConfig: FieldProps[] = [
     {
         label: '标签名称',
         name: 'label',
@@ -44,7 +44,7 @@ export const basePropsConfig: SchemaProps[] = [
     }
 ];
 
-export const placeholderConfig: SchemaProps = {
+export const placeholderConfig: FieldProps = {
     label: '占位符',
     name: 'placeholder',
     valueType: 'Input',
@@ -54,13 +54,13 @@ export const placeholderConfig: SchemaProps = {
 };
 
 /** 颜色属性配置 */
-export const colorPropsConfig: SchemaProps[] = [];
+export const colorPropsConfig: FieldProps[] = [];
 
 /** 输入框属性配置 */
-export const inputPropsConfig: SchemaProps[] = [placeholderConfig];
+export const inputPropsConfig: FieldProps[] = [placeholderConfig];
 
 /** 数字输入框属性配置 */
-export const inputNumberPropsConfig: SchemaProps[] = [
+export const inputNumberPropsConfig: FieldProps[] = [
     placeholderConfig,
     {
         label: '最大值',
@@ -75,10 +75,10 @@ export const inputNumberPropsConfig: SchemaProps[] = [
 ];
 
 /** 文本域属性配置 */
-export const textAreaPropsConfig: SchemaProps[] = [placeholderConfig];
+export const textAreaPropsConfig: FieldProps[] = [placeholderConfig];
 
 /** 下拉框属性配置 */
-export const selectPropsConfig: SchemaProps[] = [
+export const selectPropsConfig: FieldProps[] = [
     placeholderConfig,
     {
         label: '是否多选',
@@ -93,7 +93,7 @@ export const selectPropsConfig: SchemaProps[] = [
 ];
 
 /** 复选框属性配置 */
-export const checkboxPropsConfig: SchemaProps[] = [
+export const checkboxPropsConfig: FieldProps[] = [
     {
         label: '选项',
         name: 'children',

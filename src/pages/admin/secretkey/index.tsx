@@ -1,4 +1,4 @@
-import { getSecretkey, updateSecretkey } from '@/services/forge';
+import { getSecretkey, updateSecretkey } from '@/services/openai';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { message, Modal, Space } from 'antd';

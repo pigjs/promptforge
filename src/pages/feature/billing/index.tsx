@@ -1,5 +1,5 @@
 /** openai 余额查询 */
-import { getBilling } from '@/services/forge';
+import { getBilling } from '@/services/openai';
 import { useRequest } from 'ahooks';
 import { Card, Col, Input, Row, Statistic } from 'antd';
 import React from 'react';

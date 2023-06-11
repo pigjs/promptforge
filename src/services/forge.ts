@@ -116,39 +116,3 @@ export function getCompletionsInfo(data = {}) {
         data
     });
 }
-
-/** 添加密钥 */
-export function addSecretkey(data = {}) {
-    return request({
-        url: '/api/forge/cecretkey',
-        method: 'POST',
-        data
-    });
-}
-
-/** 获取密钥列表 */
-export function getSecretkey(params = {}) {
-    return request({
-        url: '/api/forge/cecretkey',
-        params
-    });
-}
-
-/** 更新密钥 */
-export function updateSecretkey(data = {}) {
-    return request({
-        url: '/api/forge/cecretkey',
-        method: 'PUT',
-        data
-    });
-}
-
-/** openai apiKey 余额 */
-export function getBilling(apiKey: string) {
-    return request({
-        url: 'https://promptforge.uk/v1/dashboard/billing',
-        params: {
-            apiKey
-        }
-    });
-}

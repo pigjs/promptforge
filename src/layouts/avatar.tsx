@@ -3,20 +3,21 @@ import loginDialog from '@/components/loginDialog';
 import UserOutlined from '@ant-design/icons/UserAddOutlined';
 import { Dropdown, Modal } from 'antd';
 import React from 'react';
+import { useModel } from 'umi';
 
-import type { UserInfo } from '@/utils/user';
 import type { MenuProps } from 'antd';
 
-const Index = ({ userInfo }: { userInfo: UserInfo }) => {
+const Index = () => {
     const [loginShow] = useDialog(loginDialog);
+
+    const { userInfo, logout: logoutSync, loginSuccess } = useModel('userModel');
 
     const logout = () => {
         Modal.confirm({
             title: '温馨提示',
             content: '是否退出登录？',
             onOk: () => {
-                localStorage.removeItem('Authorization');
-                localStorage.removeItem('userInfo');
+                logoutSync();
                 window.location.reload();
             }
         });
@@ -32,7 +33,7 @@ const Index = ({ userInfo }: { userInfo: UserInfo }) => {
     if (!userInfo.userId) {
         return (
             <div
-                onClick={() => loginShow()}
+                onClick={() => loginShow({ loginSuccess })}
                 style={{ display: 'flex', alignItems: 'center', color: '#fff', fontSize: 16 }}
             >
                 <UserOutlined />

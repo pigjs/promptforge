@@ -14,25 +14,18 @@ export type CreateChatCompletionRequest = OCreateChatCompletionRequest & {
 };
 
 export type ChatGPTOptions = {
-    // apiKey: string;
-    apiUrl?: string;
+    apiUrl: string;
 };
 
 export class ChatGPTApi {
-    protected _apiKey: string;
     protected _apiUrl: string;
 
     constructor(options: ChatGPTOptions) {
-        const { apiUrl = 'https://api.openai.com/v1/chat/completions' } = options;
-        // this._apiKey = apiKey;
+        const { apiUrl } = options;
         this._apiUrl = apiUrl;
-
-        // if (!this._apiKey) {
-        //     throw new Error('OpenAI missing required apiKey');
-        // }
     }
 
-    createChatCompletion = (options: any) => {
+    createChatCompletion = (options: CreateChatCompletionRequest) => {
         const { onProgress, ...resetOptions } = options;
         const abortController = new AbortController();
         const { signal } = abortController;

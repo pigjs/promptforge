@@ -37,6 +37,13 @@ export default defineConfig({
             .tap(() => {
                 return [/moment[/\\]locale$/, /zh-cn/];
             });
+        // 启用 asyncWebAssembly 实验特性
+        config.experiments({ layers: true, asyncWebAssembly: true });
+        // 修改 exclude 规则来排除 .wasm 文件
+        config.module
+            .rule('exclude-wasm')
+            .exclude.add(/\.wasm$/)
+            .end();
     },
     plugins: ['@umijs/plugins/dist/initial-state', '@umijs/plugins/dist/model'],
     initialState: {},

@@ -13,7 +13,7 @@ const Index = (props, ref) => {
 
     React.useImperativeHandle(ref, () => ({ ...fieldRenderRef.current }));
 
-    const { ref1, ref2, schema, initialValues, promptInfo } = props;
+    const { ref1, ref2, schema, initialValues, name, description } = props;
     const [open, setOpen] = React.useState(false);
 
     const { mobile } = useModel('uaModel');
@@ -25,7 +25,7 @@ const Index = (props, ref) => {
         if (mobile) {
             return (
                 <div className={styles.sidebar_warp}>
-                    <Drawer title={promptInfo.name} placement='left' closable={false} onClose={onClose} open={open}>
+                    <Drawer title={name} placement='left' closable={false} onClose={onClose} open={open}>
                         {child}
                     </Drawer>
                     <FloatButton ref={ref1} icon={<SettingOutlined />} shape='circle' onClick={() => setOpen(true)} />
@@ -37,9 +37,9 @@ const Index = (props, ref) => {
 
     return layout(
         <div className={`${styles.sidebar} ${mobile ? styles.mobile : ''}`}>
-            {!mobile ? <div className={styles.sidebar_title}>{promptInfo.name}</div> : null}
+            {!mobile ? <div className={styles.sidebar_title}>{name}</div> : null}
             <div ref={!mobile ? ref1 : null} className={styles.sidebar_description}>
-                {promptInfo.description}
+                {description}
             </div>
             <Divider />
             <div ref={!mobile ? ref2 : null}>

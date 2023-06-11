@@ -1,40 +1,29 @@
 import { message } from 'antd';
 import { ChatGPTApi } from './chatgpt-browser';
 
-import type { CreateChatCompletionResponse } from './chatgpt-browser';
+import type { CreateChatCompletionRequest, CreateChatCompletionResponse } from './chatgpt-browser';
 
-type PerformQueryOptionsType = {
+export type PerformQueryOptionsType = Omit<CreateChatCompletionRequest, 'onProgress'> & {
     /** 重试次数 默认 3 */
     maxAttempts?: number;
-    /** 应用id */
-    content: string;
-    /** userPrompt 配置 */
-    userPromptOptions: Record<string, any>;
-    // /** 系统 Prompt */
-    // systemPrompt: string;
-    // /** 用户 Prompt */
-    // userPrompt: string;
-    // /** 上下文 */
-    // messages?: any[];
     onProgress: (content: string) => void;
 };
 
 // @ts-ignore
 export async function performQueryStream(options: PerformQueryOptionsType) {
-    const { maxAttempts = 3, onProgress, content, userPromptOptions } = options;
+    const { maxAttempts = 3, onProgress, ...resetOptions } = options;
     const openai = new ChatGPTApi({ apiUrl: 'https://promptforge.uk/v1/chat/completions' });
 
     for (let i = 0; i < maxAttempts; i++) {
         try {
             const completion = await openai.createChatCompletion({
-                content,
                 onProgress: (result: CreateChatCompletionResponse) => {
                     const content = result.data.choices[0].message?.content as string;
                     onProgress?.(content);
-                }
+                },
+                ...resetOptions
             });
             return {
-                prompt: userPromptOptions.prompt,
                 response: completion.data.choices[0].message?.content?.trim()
             };
         } catch (error: any) {

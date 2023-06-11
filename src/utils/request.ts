@@ -1,10 +1,9 @@
 import loginDialog from '@/components/loginDialog';
 import { eventHub } from '@/utils/eventHub';
-import { clearToken, getToken } from '@/utils/user';
+import { LocalStorage, LocalStorageKey } from '@/utils/localStorage';
 import { setConfig, setMessage } from '@pigjs/request';
 import { message, Modal } from 'antd';
 import axios from 'axios';
-import { clearUserInfo } from './user';
 
 // 登录单例
 let loginInstance = false;
@@ -18,21 +17,24 @@ setConfig({
         401: () => {
             // 未登录
             if (!loginInstance) {
-                clearToken();
-                clearUserInfo();
+                // 触发退出登录事件，useModel 内部会处理退出登录的
                 eventHub.emit('logout');
                 const reload = () => {
                     setTimeout(() => location.reload(), 300);
                 };
-                loginDialog().show({ onOk: reload });
+                const loginSuccess = (options) => {
+                    const { userInfo, token } = options;
+                    LocalStorage.set(LocalStorageKey.userInfo, userInfo);
+                    LocalStorage.set(LocalStorageKey.token, token);
+                };
+                loginDialog().show({ onOk: reload, loginSuccess });
                 loginInstance = true;
             }
         }
     },
     headers: () => {
         // headers 配置
-        // 可以设置token等
-        const token = getToken();
+        const token = LocalStorage.get(LocalStorageKey.token);
         if (token) {
             return {
                 Authorization: `Bearer ${token}`

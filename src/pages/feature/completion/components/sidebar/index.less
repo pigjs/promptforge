@@ -1,0 +1,98 @@
+:global {
+    .ant-drawer-content {
+        color: #fff !important;
+        background: #343541 !important;
+    }
+    .ant-drawer-content-wrapper {
+        width: 85% !important;
+        max-width: 378px !important;
+    }
+    .ant-drawer-mask {
+        background: transparent;
+    }
+    .ant-form-item-label > label {
+        color: #fff !important;
+    }
+    .ant-drawer-body {
+        padding: 0 !important;
+        .ant-form {
+            color: #fff !important;
+        }
+        .ant-form-item {
+            color: #fff !important;
+        }
+        .ant-form-item-label > label {
+            color: #fff !important;
+        }
+    }
+    .ant-drawer-title {
+        color: #fff !important;
+    }
+    .ant-float-btn {
+        inset-inline-end: 10px;
+        inset-block-end: 100px;
+    }
+}
+.sidebar {
+    box-sizing: border-box;
+    width: 25%;
+    min-width: 340px;
+    height: 100%;
+    padding: 24px 16px;
+    overflow: auto;
+    color: #fff;
+    background-color: #343541;
+    border-radius: 8px;
+    &_add {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        height: 44px;
+        margin-bottom: 10px;
+        padding: 0 8px;
+        border: 1px solid #444654;
+        border-radius: 8px;
+        cursor: pointer;
+        &:hover {
+            background: #444654;
+        }
+    }
+    &_item {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        height: 44px;
+        padding: 0 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        &_right {
+            margin-left: auto;
+        }
+        &_name {
+            flex: 1;
+            height: 100%;
+            margin-right: 8px;
+            line-height: 44px;
+        }
+        &_active {
+            background: #444654;
+        }
+        &:hover {
+            background: #444654;
+        }
+        &_icon {
+            color: #d9d9e3;
+            font-size: 16px;
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+}
+
+.mobile {
+    width: 100% !important;
+    min-width: auto !important;
+    padding: 10px !important;
+}

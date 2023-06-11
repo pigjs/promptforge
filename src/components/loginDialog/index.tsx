@@ -1,7 +1,6 @@
 import { dialog } from '@/components/dialog';
 import { login, register } from '@/services/user';
 import { eventHub } from '@/utils/eventHub';
-import { setToken, setUserInfo } from '@/utils/user';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message, Modal } from 'antd';
 import React from 'react';
@@ -32,13 +31,16 @@ type ActiveType = keyof typeof activeEnum;
 export type LoginProps = {
     /** 登录成功回调 不传默认 刷新页面 */
     onOk?: () => Promise<void> | void;
+    loginSuccess?: (options: any) => void;
 };
 
 const Index: DialogFC<LoginProps> = (props) => {
-    const { onClose } = props;
+    const { onClose, loginSuccess } = props;
 
     const [loading, setLoading] = React.useState(false);
     const [active, setActive] = React.useState<ActiveType>('login');
+
+    // const { loginSuccess } = useModel('userModel');
 
     const onOk = async () => {
         await props.onOk?.();
@@ -59,10 +61,8 @@ const Index: DialogFC<LoginProps> = (props) => {
             }
             const data = res?.data || {};
             const { token, userInfo } = data;
-            setToken(token);
-            setUserInfo(userInfo);
+            loginSuccess?.({ userInfo, token });
             setLoading(false);
-
             message.success(activeEnum[active].successText);
             onOk();
         } catch (err) {

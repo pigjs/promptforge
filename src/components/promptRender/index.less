@@ -1,115 +1,78 @@
-:global {
-    .ant-tour {
-        width: 80% !important;
-        max-width: 520px !important;
-    }
-}
-
 .promptRender {
-    :global {
-        .ant-form-item .ant-form-item-label > label {
-            color: #fff !important;
-        }
-    }
-
-    position: relative;
-    display: flex;
-    height: 100%;
-    color: #fff;
-    &_left {
-        box-sizing: border-box;
-        width: 25%;
-        min-width: 340px;
-        height: 100%;
-        padding: 24px;
+    flex: 1;
+    &_messageList {
+        height: calc(100% - 60px);
+        margin-bottom: 20px;
         overflow: auto;
-        background-color: #343541;
-        border-radius: 8px;
-        &_title {
-            font-weight: 600;
-            font-size: 24px;
-            line-height: 1.5;
-        }
-        &_description {
-            box-sizing: border-box;
-            height: 120px;
-            margin-top: 8px;
-            padding: 8px;
-            overflow: auto;
-            font-size: 16px;
-            line-height: 1.2;
-            // 合并空白符序列 但保留换行符
-            white-space: pre-line;
-            border: 1px solid #444654;
-            border-radius: 8px;
+
+        :global {
+            .ant-spin-nested-loading {
+                height: 100% !important;
+            }
+
+            .ant-spin-nested-loading .ant-spin-container {
+                height: 100% !important;
+            }
+
+            .ant-spin-nested-loading .ant-spin-blur::after {
+                opacity: 1 !important;
+            }
+
+            .ant-spin-nested-loading .ant-spin-container::after {
+                background: none !important;
+            }
         }
     }
-    &_right {
-        flex: 1;
-        box-sizing: border-box;
-        &_messageList {
-            height: calc(100% - 60px);
-            margin-bottom: 20px;
-            overflow: auto;
-            :global {
-                .ant-spin-nested-loading {
-                    height: 100% !important;
-                }
-                .ant-spin-nested-loading .ant-spin-container {
-                    height: 100% !important;
-                }
-                .ant-spin-nested-loading .ant-spin-blur::after {
-                    opacity: 1 !important;
-                }
-                .ant-spin-nested-loading .ant-spin-container::after {
-                    background: none !important;
+    &_send {
+        display: flex;
+        align-items: center;
+        padding: 0 7vw;
+        overflow-y: auto;
+
+        :global {
+            .ant-input-textarea {
+                height: auto !important;
+                min-height: 100px !important;
+                background-color: #343541;
+                border-color: #40414f;
+                resize: none !important;
+            }
+
+            .ant-input {
+                color: #fff;
+                background-color: #343541;
+                border-color: #40414f;
+
+                &::placeholder {
+                    color: #8e8e9f;
                 }
             }
         }
-        &_send {
-            display: flex;
-            align-items: center;
-            padding: 0 7vw;
-            overflow-y: auto;
-            :global {
-                .ant-input-textarea {
-                    height: auto !important;
-                    min-height: 100px !important;
-                    background-color: #343541;
-                    border-color: #40414f;
-                    resize: none !important;
-                }
-                .ant-input {
-                    color: #fff;
-                    background-color: #343541;
-                    border-color: #40414f;
-                    &::placeholder {
-                        color: #8e8e9f;
-                    }
-                }
-            }
-            &_icon {
-                transform: rotate(320deg);
-                font-size: 18px;
-                opacity: 0.4;
-            }
-            &_icon_mobile {
-                margin-left: 4px;
-                height: 41px;
-                padding: 0 10px;
-                line-height: 38px;
-            }
-            &_icon_web {
-                margin-left: 4px;
-                height: 41px;
-                padding: 0 10px;
-                line-height: 38px;
-                border-radius: 8px;
-                cursor: pointer;
-                &:hover {
-                    background-color: #343541;
-                    color: #fff;
-                }
+
+        &_icon {
+            font-size: 18px;
+            transform: rotate(320deg);
+            opacity: 0.4;
+        }
+
+        &_icon_mobile {
+            height: 41px;
+            margin-left: 4px;
+            padding: 0 10px;
+            line-height: 38px;
+        }
+
+        &_icon_web {
+            height: 41px;
+            margin-left: 4px;
+            padding: 0 10px;
+            line-height: 38px;
+            border-radius: 8px;
+            cursor: pointer;
+
+            &:hover {
+                color: #fff;
+                background-color: #343541;
             }
         }
     }

@@ -1,49 +1,34 @@
 import { useLogin } from '@/hooks/useLogin';
-import { eventHub } from '@/utils/eventHub';
-import { getUserInfo } from '@/utils/user';
 import { ProLayout } from '@ant-design/pro-components';
-import { useEvent, useMount, useUnmount } from '@pigjs/utils';
 import { Dropdown } from 'antd';
 import React from 'react';
-import { history, Link, Outlet, useLocation } from 'umi';
+import { history, Link, Outlet, useLocation, useModel } from 'umi';
 import Avatar from './avatar';
 
 import type { MenuProps } from 'antd';
 
 const adminItems: MenuProps['items'] = [
     {
-        key: '1',
-        label: (
-            <Link to='/admin/forge' key='adminForge'>
-                应用管理
-            </Link>
-        )
+        key: 'adminForge',
+        label: <Link to='/admin/forge'>应用管理</Link>
     },
     {
-        key: '2',
-        label: (
-            <Link to='/admin/secretkey' key='adminSecretkey'>
-                密钥管理
-            </Link>
-        )
+        key: 'adminSecretkey',
+        label: <Link to='/admin/secretkey'>密钥管理</Link>
     }
 ];
 const forgeItems: MenuProps['items'] = [
     {
-        key: '1',
-        label: (
-            <Link to='/forge' key='forge'>
-                应用中心
-            </Link>
-        )
+        key: 'forge',
+        label: <Link to='/forge'>应用中心</Link>
     },
     {
-        key: '2',
-        label: (
-            <Link to='/feature/billing' key='featureBilling'>
-                OpenAI 余额查询
-            </Link>
-        )
+        key: 'featureCompletion',
+        label: <Link to='/feature/completion'>Chat 聊天</Link>
+    },
+    {
+        key: 'featureBilling',
+        label: <Link to='/feature/billing'>OpenAI 余额查询</Link>
     }
 ];
 
@@ -51,28 +36,7 @@ export default () => {
     const location = useLocation();
     const { pathname } = location;
 
-    const [userInfo, setUserInfo] = React.useState(() => {
-        return getUserInfo();
-    });
-
-    const loginSuccess = useEvent(() => {
-        const userInfo = getUserInfo();
-        setUserInfo(userInfo);
-    });
-
-    const logout = () => {
-        setUserInfo({});
-    };
-
-    useMount(() => {
-        eventHub.on('login', loginSuccess);
-        eventHub.on('logout', logout);
-    });
-
-    useUnmount(() => {
-        eventHub.off('login', loginSuccess);
-        eventHub.off('logout', logout);
-    });
+    const { userInfo } = useModel('userModel');
 
     const defaultSettings = {
         // colorPrimary: '#1677FF',

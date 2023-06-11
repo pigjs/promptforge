@@ -16,10 +16,9 @@ export class LocalStorage {
         try {
             return JSON.parse(value);
         } catch (err) {
-            //
-            console.log(err, 'err');
+            console.error(`LocalStorage.get：${key},error：`, err);
         }
-        return value;
+        return null;
     }
     static del(key: LocalStorageKey) {
         window.localStorage.removeItem(key);
@@ -27,5 +26,11 @@ export class LocalStorage {
 }
 
 export enum LocalStorageKey {
-    selectedTags = 'selectedTags'
+    selectedTags = 'selectedTags',
+    userInfo = 'userInfo',
+    token = 'token',
+    readTour = 'readTour',
+    featureTour = 'featureTour',
+    completionTour = 'completionTour',
+    activeCompletions = 'activeCompletions'
 }

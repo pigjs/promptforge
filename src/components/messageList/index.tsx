@@ -5,19 +5,28 @@ import React, { Fragment } from 'react';
 
 import styles from './index.less';
 
+export enum RoleEnum {
+    user = 'user',
+    assistant = 'assistant',
+    system = 'system'
+}
+
 export interface MessageType {
-    role: 'user' | 'assistant';
+    id?: string;
+    role: RoleEnum;
     content?: string;
     error?: string;
+    usedTokens?: number;
 }
 
 export interface MessageListProps {
     messageList: MessageType[];
-    stream: boolean;
+    loading: boolean;
     streamMessage?: MessageType;
+    streamLoading: boolean;
 }
 
-const RenderItem = (props: { item: MessageType; index: number }) => {
+const RenderItem = (props: { item: MessageType; index: number; loading?: boolean }) => {
     const { item, index, loading } = props;
     return (
         <Fragment key={index}>
@@ -51,7 +60,6 @@ const RenderItem = (props: { item: MessageType; index: number }) => {
                                 >
                                     <MarkdownView loading={loading} source={item.content!} />
                                 </span>
-                                // @ts-ignore
                             )
                         }
                         className={styles.messageList_systemItem}
@@ -63,11 +71,11 @@ const RenderItem = (props: { item: MessageType; index: number }) => {
 };
 
 const Index = (props: MessageListProps) => {
-    const { messageList = [], stream, streamMessage, loading } = props;
+    const { messageList = [], streamMessage, loading, streamLoading } = props;
 
     return (
         <div className={styles.messageList}>
-            {stream && isEmptyArray(messageList) ? null : (
+            {loading && isEmptyArray(messageList) ? null : (
                 <List
                     style={{ width: '100%' }}
                     dataSource={messageList}
@@ -76,13 +84,13 @@ const Index = (props: MessageListProps) => {
                     renderItem={(item, index) => <RenderItem item={item} index={index} />}
                 />
             )}
-            {stream && streamMessage && (
+            {loading && streamMessage && (
                 <List
                     style={{ width: '100%' }}
                     dataSource={[streamMessage]}
                     itemLayout='horizontal'
                     locale={{ emptyText: <span style={{ color: '#fff' }}>暂无消息</span> }}
-                    renderItem={(item, index) => <RenderItem loading={loading} item={item} index={index} />}
+                    renderItem={(item, index) => <RenderItem loading={streamLoading} item={item} index={index} />}
                 />
             )}
         </div>

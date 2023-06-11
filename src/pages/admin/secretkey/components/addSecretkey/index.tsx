@@ -1,4 +1,4 @@
-import { addSecretkey } from '@/services/forge';
+import { addSecretkey } from '@/services/openai';
 import { PlusOutlined } from '@ant-design/icons';
 import { ModalForm, ProFormText } from '@ant-design/pro-components';
 import { Button, Form, message } from 'antd';
@@ -7,7 +7,6 @@ export default (props) => {
     const { onOk } = props;
     const [form] = Form.useForm<{ name: string; company: string }>();
     const onFinish = async (values: any) => {
-        console.log(values);
         await addSecretkey(values);
         message.success('提交成功');
         onOk();
