@@ -19,11 +19,10 @@ specifiers:
     babel-plugin-import: ^1.13.6
     cross-env: ^7.0.3
     dayjs: ^1.11.7
+    decimal.js: ^10.4.3
     enquire-js: ^0.2.1
     eslint: 7.32.0
     eventsource-parser: ^1.0.0
-    file-loader: ^6.2.0
-    gpt-tokens: ^1.0.7
     husky: 8.0.2
     js-tiktoken: ^1.0.6
     lint-staged: 13.0.3
@@ -41,7 +40,6 @@ specifiers:
     react-syntax-highlighter: ^15.5.0
     stylelint: 13.13.1
     umi: ^4.0.65
-    wasm-loader: ^1.3.0
 
 dependencies:
     '@ant-design/icons': 5.0.1
@@ -53,9 +51,9 @@ dependencies:
     antd: 5.4.3
     axios: 1.4.0
     dayjs: 1.11.7
+    decimal.js: 10.4.3
     enquire-js: 0.2.1
     eventsource-parser: 1.0.0
-    gpt-tokens: 1.0.7
     js-tiktoken: 1.0.6
     localforage: 1.10.0
     openai: 3.2.1
@@ -80,13 +78,11 @@ devDependencies:
     babel-plugin-import: 1.13.6
     cross-env: 7.0.3
     eslint: 7.32.0
-    file-loader: 6.2.0
     husky: 8.0.2
     lint-staged: 13.0.3
     prettier: 2.7.1
     pretty-quick: 3.1.3_prettier@2.7.1
     stylelint: 13.13.1
-    wasm-loader: 1.3.0
 
 packages:
     /@ahooksjs/use-request/2.8.15:
@@ -2621,13 +2617,6 @@ packages:
                 integrity: sha512-/Z3l6pXthq0JvMYdUFyX9j0MaCltlIn6mfh9jLyQwg5aPKxkyNa0PTHtU1AlFXLNk55ZuAeJRcpvq+tmLfKmaQ==
             }
         engines: { node: '>=10' }
-        dev: false
-
-    /@dqbd/tiktoken/1.0.7:
-        resolution:
-            {
-                integrity: sha512-bhR5k5W+8GLzysjk8zTMVygQZsgvf7W1F0IlL4ZQ5ugjo5rCyiwGM5d8DYriXspytfu98tv59niang3/T+FoDw==
-            }
         dev: false
 
     /@emotion/hash/0.8.0:
@@ -5653,6 +5642,7 @@ packages:
             ajv: ^6.9.1
         dependencies:
             ajv: 6.12.6
+        dev: false
 
     /ajv-keywords/5.1.0_ajv@8.12.0:
         resolution:
@@ -6283,15 +6273,6 @@ packages:
             regenerator-runtime: 0.11.1
         dev: false
 
-    /babylon/7.0.0-beta.47:
-        resolution:
-            {
-                integrity: sha512-+rq2cr4GDhtToEzKFD6KZZMDBXhjFAr9JjPw9pAppZACeEWqNM294j+NdBzkSHYXwzzBmVjZ3nEVJlOhbR2gOQ==
-            }
-        engines: { node: '>=6.0.0' }
-        hasBin: true
-        dev: true
-
     /bail/1.0.5:
         resolution:
             {
@@ -6337,6 +6318,7 @@ packages:
             {
                 integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==
             }
+        dev: false
 
     /binary-extensions/2.2.0:
         resolution:
@@ -7875,6 +7857,7 @@ packages:
                 integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
             }
         engines: { node: '>= 4' }
+        dev: false
 
     /end-of-stream/1.4.4:
         resolution:
@@ -8889,19 +8872,6 @@ packages:
         dependencies:
             flat-cache: 3.0.4
 
-    /file-loader/6.2.0:
-        resolution:
-            {
-                integrity: sha512-qo3glqyTa61Ytg4u73GultjHGjdRyig3tG6lPtyX/jOEJvHif9uB0/OCI2Kif6ctF3caQTW2G5gym21oAsI4pw==
-            }
-        engines: { node: '>= 10.13.0' }
-        peerDependencies:
-            webpack: ^4.0.0 || ^5.0.0
-        dependencies:
-            loader-utils: 2.0.4
-            schema-utils: 3.1.2
-        dev: true
-
     /fill-range/7.0.1:
         resolution:
             {
@@ -9355,16 +9325,6 @@ packages:
             }
         dependencies:
             get-intrinsic: 1.2.0
-
-    /gpt-tokens/1.0.7:
-        resolution:
-            {
-                integrity: sha512-5XANnpcOZjiSL0HA0G4BSuyTfEP6N+oPbCIr8ICL1l+ftiIq/7Y9sCA83U/KxETxVAc6pQPgEIyNK/PGuLcFwA==
-            }
-        dependencies:
-            '@dqbd/tiktoken': 1.0.7
-            decimal.js: 10.4.3
-        dev: false
 
     /graceful-fs/4.2.11:
         resolution:
@@ -10930,18 +10890,6 @@ packages:
             wrap-ansi: 7.0.0
         dev: true
 
-    /loader-utils/1.4.2:
-        resolution:
-            {
-                integrity: sha512-I5d00Pd/jwMD2QCduo657+YM/6L3KZu++pmX9VFncxaxvHcru9jx1lBaFft+r4Mt2jK0Yhp41XlRAihzPxHNCg==
-            }
-        engines: { node: '>=4.0.0' }
-        dependencies:
-            big.js: 5.2.2
-            emojis-list: 3.0.0
-            json5: 1.0.2
-        dev: true
-
     /loader-utils/2.0.4:
         resolution:
             {
@@ -10952,6 +10900,7 @@ packages:
             big.js: 5.2.2
             emojis-list: 3.0.0
             json5: 2.2.3
+        dev: false
 
     /local-pkg/0.4.3:
         resolution:
@@ -11069,14 +11018,6 @@ packages:
             cli-cursor: 3.1.0
             slice-ansi: 4.0.0
             wrap-ansi: 6.2.0
-        dev: true
-
-    /long/3.2.0:
-        resolution:
-            {
-                integrity: sha512-ZYvPPOMqUwPoDsbJaR10iQJYnMuZhRTvHYl62ErLIEX7RgFlziSBUUvrt3OVfc47QlHHpzPZYP17g3Fv7oeJkg==
-            }
-        engines: { node: '>=0.6' }
         dev: true
 
     /longest-streak/2.0.4:
@@ -15504,6 +15445,7 @@ packages:
             '@types/json-schema': 7.0.11
             ajv: 6.12.6
             ajv-keywords: 3.5.2_ajv@6.12.6
+        dev: false
 
     /schema-utils/4.0.1:
         resolution:
@@ -17342,33 +17284,6 @@ packages:
             loose-envify: 1.4.0
         dev: false
 
-    /wasm-dce/1.0.2:
-        resolution:
-            {
-                integrity: sha512-Fq1+nu43ybsjSnBquLrW/cULmKs61qbv9k8ep13QUe0nABBezMoNAA+j6QY66MW0/eoDVDp1rjXDqQ2VKyS/Xg==
-            }
-        dependencies:
-            '@babel/core': 7.21.4
-            '@babel/traverse': 7.21.4
-            '@babel/types': 7.21.4
-            babylon: 7.0.0-beta.47
-            webassembly-interpreter: 0.0.30
-        transitivePeerDependencies:
-            - supports-color
-        dev: true
-
-    /wasm-loader/1.3.0:
-        resolution:
-            {
-                integrity: sha512-R4s75XH+o8qM+WaRrAU9S2rbAMDzob18/S3V8R9ZoFpZkPWLAohWWlzWAp1ybeTkOuuku/X1zJtxiV0pBYxZww==
-            }
-        dependencies:
-            loader-utils: 1.4.2
-            wasm-dce: 1.0.2
-        transitivePeerDependencies:
-            - supports-color
-        dev: true
-
     /wbuf/1.7.3:
         resolution:
             {
@@ -17394,25 +17309,6 @@ packages:
             }
         engines: { node: '>= 8' }
         dev: false
-
-    /webassembly-floating-point-hex-parser/0.1.2:
-        resolution:
-            {
-                integrity: sha512-TUf1H++8U10+stJbFydnvrpG5Sznz5Rilez/oZlV5zI0C/e4cSxd8rALAJ8VpTvjVWxLmL3SVSJUK6Ap9AoiNg==
-            }
-        dev: true
-
-    /webassembly-interpreter/0.0.30:
-        resolution:
-            {
-                integrity: sha512-+Jdy2piEvz9T5j751mOE8+rBO12p+nNW6Fg4kJZ+zP1oUfsm+151sbAbM8AFxWTURmWCGP+r8Lxwfv3pzN1bCQ==
-            }
-        hasBin: true
-        dependencies:
-            '@babel/code-frame': 7.21.4
-            long: 3.2.0
-            webassembly-floating-point-hex-parser: 0.1.2
-        dev: true
 
     /which-boxed-primitive/1.0.2:
         resolution:

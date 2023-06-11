@@ -1,5 +1,5 @@
-import type { Tiktoken } from '@dqbd/tiktoken';
 import Decimal from 'decimal.js';
+import type { Tiktoken } from 'js-tiktoken';
 import { encodingForModel as encoding_for_model, getEncoding as get_encoding } from 'js-tiktoken';
 
 /**
