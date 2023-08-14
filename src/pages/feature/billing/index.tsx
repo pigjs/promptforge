@@ -10,15 +10,18 @@ import styles from './index.less';
 const { Search } = Input;
 
 const Index = () => {
+
     const { mobile } = useModel('uaModel');
 
     const {
-        
+
         data: res,
         loading,
         run: getBillingAsync
     } = useRequest((apiKey) => getBilling(apiKey), {
         manual: true
+
+        
     });
 
     const data = res?.data || {};
