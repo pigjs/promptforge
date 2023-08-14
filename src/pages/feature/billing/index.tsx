@@ -13,6 +13,7 @@ const Index = () => {
     const { mobile } = useModel('uaModel');
 
     const {
+        
         data: res,
         loading,
         run: getBillingAsync
